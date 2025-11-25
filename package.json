@@ -1,0 +1,14 @@
+{
+  "name": "newcomb-empirica",
+  "version": "1.0.0",
+  "scripts": {
+    "start:api": "node api/router.mjs"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "find-config": "^1.0.0",
+    "openai": "^6.4.0"
+  }
+}

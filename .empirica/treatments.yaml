@@ -1,0 +1,57 @@
+factors:
+  - desc: playerCount determines the number of Players are in a Game.
+    name: playerCount
+    values:
+      - value: 1
+  - desc: Type of allocator used in the game.
+    name: allocatorType
+    values:
+      - value: random
+      - value: silentAI
+      - value: generativeAI
+  - desc: Type of predictor used in the game.
+    name: isAI
+    values:
+      - value: false
+      - value: true
+  - desc: Number of rounds in the game.
+    name: nRound
+    values:
+      - value: 1
+      - value: 3
+treatments:
+  - desc: "exp1-random"
+    factors:
+      playerCount: 1
+      allocatorType: random
+      isAI: false
+      nRound: 1
+    name: exp1-random
+  - desc: "exp1-silentAI"
+    factors:
+      playerCount: 1
+      allocatorType: silentAI
+      isAI: true
+      nRound: 1
+    name: exp1-silentAI
+  - desc: "exp2-random"
+    factors:
+      playerCount: 1
+      allocatorType: random
+      isAI: false
+      nRound: 1
+    name: exp2-random
+  - desc: "exp2-silentAI"
+    factors:
+      playerCount: 1
+      allocatorType: silentAI
+      isAI: true
+      nRound: 1
+    name: exp2-silentAI
+  - desc: "exp2-generativeAI"
+    factors:
+      playerCount: 1
+      allocatorType: generativeAI
+      isAI: true
+      nRound: 1
+    name: exp2-generativeAI

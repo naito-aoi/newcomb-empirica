@@ -1,0 +1,9 @@
+name = "newcomb-empirica"
+
+[tajriba.auth]
+srtoken = "GNLLiJnqMirXaxhJ"
+
+[[tajriba.auth.users]]
+name = "Admin"
+username = "admin"
+password = "DqWKiwSK"

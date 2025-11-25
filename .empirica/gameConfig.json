@@ -1,0 +1,26 @@
+[
+  {
+    "type": "metadata",
+    "updatedAt": "2025-10-25T12:00",
+    "updatedBy": "Aoi Naito"
+  },
+  {
+    "type": "bonus",
+    "basePay": 0,
+    "returnBonus": 1,
+    "completionPay": 3,
+    "completionNewcomb": 3,
+    "newcombBoxAValue": 1,
+    "newcombBoxBValue": 3
+  },
+  {
+    "type": "task",
+    "introDuration": 600000,
+    "confirmationDuration": 30,
+    "choiceDuration": 60,
+    "resultDuration": 30,
+    "confirmationDurationDev": 60000,
+    "choiceDurationDev": 60000,
+    "resultDurationDev": 30000
+  }
+]
