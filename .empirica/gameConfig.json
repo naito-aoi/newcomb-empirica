@@ -17,9 +17,11 @@
     "type": "task",
     "introDuration": 600000,
     "confirmationDuration": 30,
+    "beliefDuration": 30,
     "choiceDuration": 60,
     "resultDuration": 30,
     "confirmationDurationDev": 60000,
+    "beliefDurationDev": 60000,
     "choiceDurationDev": 60000,
     "resultDurationDev": 30000
   }

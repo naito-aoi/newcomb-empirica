@@ -9,10 +9,10 @@ import {
     ConversationEmptyState,
     ConversationScrollButton,
 } from '@/components/ai-elements/conversation';
-import { 
-        Message, 
-        MessageContent,
-        MessageAvatar,
+import {
+    Message,
+    MessageContent,
+    MessageAvatar,
 } from '@/components/ai-elements/message';
 import { Response } from '@/components/ai-elements/response';
 import { Loader } from '@/components/ai-elements/loader';
@@ -33,7 +33,7 @@ export function AIPrediction() {
     const playerAvatar = player.get("avatar");
     const pdStep = player.round.get("pdStep") || "instruction"; // "instruction"; "message"; "decision"; "finished"
 
-    if (stage.get("name") === "result") {
+    if (stage.get("name") !== "choice") {
         return null;
     }
 
@@ -73,7 +73,7 @@ export function AIPrediction() {
                     <div className="absolute inset-0 flex items-center justify-center">
                         <div className="h-8 w-30 rounded-md bg-green-500 animate-ping"></div>
                     </div>
-                    <Button 
+                    <Button
                         size="icon"
                         className="relative h-10 w-50 bg-green-500 hover:bg-green-700 transition duration-150 shadow-lg text-lg rounded-lg"
                         onClick={() => {
@@ -85,7 +85,7 @@ export function AIPrediction() {
                     </Button>
                 </div>
             ) : (
-            <></>
+                <></>
             )}
             <Conversation id="ai-conversation" className="w-full h-30 mb-auto">
                 <ConversationContent>
@@ -94,13 +94,13 @@ export function AIPrediction() {
                             title="No prediction yet."
                             description={`Please click the "Start AI prediction" button above.`}
                         />
-                        ) : (
+                    ) : (
                         messageStream.map((message, index) => (
                             <Message from={message.role} key={index}>
                                 <MessageContent>
                                     <Response components={customComponents}>{message.content}</Response>
                                 </MessageContent>
-                                <MessageAvatar src={(message.role==="assistant") ? `/fig/icon/assistant/${message.role}-icon.svg` : `/fig/icon/user/${playerAvatar}.svg`} />
+                                <MessageAvatar src={(message.role === "assistant") ? `/fig/icon/assistant/${message.role}-icon.svg` : `/fig/icon/user/${playerAvatar}.svg`} />
                             </Message>
                         ))
                     )}

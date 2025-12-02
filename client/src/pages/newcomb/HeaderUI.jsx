@@ -33,26 +33,37 @@ export function HeaderUI() {
             </div>
         </>
     );
-    const resultUI = (
+    const beliefUI = (
         <>
-            <div className="text-xl">Result</div>
-            <div className="mr-2">
+            <div className="text-xl">Decision Making Task</div>
+            <div className="mr-2 mt-4">
                 <div className="text-sm font-light">
-                    {(treatment.isAI) ? <><span id="ai-avatar">The AI</span> predicted</> : <><span id="ai-avatar">The wheel</span> indicated</>} that you would choose to
-                </div>
-                <div className="font-light text-sm">
-                <span id="one-boxer">
-                    open only Box B &nbsp;
-                </span>
-                <span>
-                    and set Box B to contain <b>${newcombBoxBValue}</b>.
-                </span>
+                    Please answer the questions about the choice you have made.
                 </div>
             </div>
         </>
     );
-    const ui = (stageName === "choice") ? choiceUI : resultUI;
-    
+    const resultUI = (
+        <>
+            <div className="text-xl">Result</div>
+            <div className="mr-2 mt-4">
+                <div className="text-sm font-light">
+                    {(treatment.isAI) ? <><span id="ai-avatar">The AI</span> predicted</> : <><span id="ai-avatar">The wheel</span> indicated</>} that you would choose to
+                </div>
+                <div className="font-light text-sm">
+                    <span id="one-boxer">
+                        open only Box B &nbsp;
+                    </span>
+                    <span>
+                        and set Box B to contain <b>${newcombBoxBValue}</b>.
+                    </span>
+                </div>
+            </div>
+        </>
+    );
+    // const ui = (stageName === "choice") ? choiceUI : resultUI;
+    const ui = (stageName === "choice") ? choiceUI : (stageName === "belief") ? beliefUI : resultUI;
+
     return (
         <>
             {ui}

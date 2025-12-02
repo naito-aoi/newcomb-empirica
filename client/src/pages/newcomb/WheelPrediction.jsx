@@ -10,8 +10,8 @@ import {
     ConversationEmptyState,
     ConversationScrollButton,
 } from '@/components/ai-elements/conversation';
-import { 
-    Message, 
+import {
+    Message,
     MessageContent,
     MessageAvatar,
 } from '@/components/ai-elements/message';
@@ -23,7 +23,7 @@ import { Button } from "@/components/animate-ui/components/buttons/button";
 import { DecisionButton } from "./DecisionButton.jsx";
 import { TextComponents } from './ColoredText.tsx';
 const customComponents = {
-  ...TextComponents,
+    ...TextComponents,
 };
 
 export function WheelPrediction() {
@@ -34,7 +34,7 @@ export function WheelPrediction() {
     const playerAvatar = player.get("avatar");
     const pdStep = player.round.get("pdStep") || "instruction"; // "instruction"; "message"; "decision"; "finished"
 
-    if (stage.get("name") === "result") {
+    if (stage.get("name") !== "choice") {
         return null;
     }
 
@@ -74,7 +74,7 @@ export function WheelPrediction() {
                     <div className="absolute inset-0 flex items-center justify-center">
                         <div className="h-8 w-30 rounded-md bg-green-500 animate-ping"></div>
                     </div>
-                    <Button 
+                    <Button
                         size="icon"
                         className="relative h-10 w-50 bg-green-500 hover:bg-green-700 transition duration-150 shadow-lg text-lg text-white rounded-lg"
                         onClick={async () => {
@@ -95,7 +95,7 @@ export function WheelPrediction() {
                     </Button>
                 </div>
             ) : (
-            <></>
+                <></>
             )}
             <Conversation id="ai-conversation" className="w-full h-50 mb-auto" style={{ height: '500px' }}>
                 <ConversationContent>
@@ -104,7 +104,7 @@ export function WheelPrediction() {
                             title="No result yet."
                             description={`Please click "${(treatment.isAI) ? "Start prediction" : "Spin the wheel"}" button above.`}
                         />
-                        ) : (
+                    ) : (
                         messageStream.map((message, index) => (
                             <Message from={message.role} key={index}>
                                 <MessageContent>

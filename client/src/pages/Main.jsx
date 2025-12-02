@@ -6,6 +6,7 @@ import {
 } from "react-resizable-panels";
 import {
     useGame,
+    useStage,
     usePlayer
 } from "@empirica/core/player/classic/react";
 
@@ -15,6 +16,7 @@ import { HeaderUI } from "./newcomb/HeaderUI.jsx";
 import { Overview } from "./overview/Overview.jsx";
 import { OperationButton } from "./newcomb/OperationButton.jsx";
 import { ResultUI } from "./newcomb/ResultUI.jsx";
+import { BeliefSlider } from "./newcomb/BeliefSlider.jsx";
 
 import { FloatingRobotAvatar } from "../avatar/FloatingRobotAvatar.jsx";
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
@@ -23,6 +25,8 @@ export function Main() {
     const game = useGame();
     const treatment = game.get("treatment");
     const player = usePlayer();
+    const stage = useStage();
+    const stageName = stage.get("name");
     const pdStep = player.round.get("pdStep") || "instruction"; // "instruction"; "message"; "decision"; "finished"
     const [collapsed, setCollapsed] = useState(false);
 
@@ -63,10 +67,17 @@ export function Main() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col items-center justify-center h-full w-full px-4 gap-4 overflow-auto">
-                    {(treatment.allocatorType === 'generativeAI') ? <AIPrediction /> : <WheelPrediction />}
-                    <ResultUI />
-                </div>
+                {(stageName === "choice" || stageName === "result") &&
+                    <div className="flex flex-col items-center justify-center h-full w-full px-4 gap-4 overflow-auto">
+                        {(treatment.allocatorType === 'generativeAI') ? <AIPrediction /> : <WheelPrediction />}
+                        <ResultUI />
+                    </div>
+                }
+                {(stageName === "belief") &&
+                    <div className="flex flex-col items-center justify-start h-full w-full px-4 gap-4 overflow-auto">
+                        <BeliefSlider />
+                    </div>
+                }
                 <div className="flex-1"></div>
                 <div className="flex items-center h-32 w-full p-4 border-t bg-gray-50 gap-2 mt-auto">
                     <OperationButton />
