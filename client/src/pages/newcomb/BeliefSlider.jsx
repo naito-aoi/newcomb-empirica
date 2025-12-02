@@ -102,16 +102,16 @@ export function BeliefSlider() {
             className="flex flex-col gap-2"
           >
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="always" id="q2-always" />
-              <Label htmlFor="q2-always">Taking both Box A and Box B</Label>
+              <RadioGroupItem value="2box" id="q2-2box" />
+              <Label htmlFor="q2-2box">Taking both Box A and Box B</Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="mostly" id="q2-mostly" />
-              <Label htmlFor="q2-mostly">Taking only Box B</Label>
+              <RadioGroupItem value="1box" id="q2-1box" />
+              <Label htmlFor="q2-1box">Taking only Box B</Label>
             </div>
             <div className="flex items-center gap-2">
-              <RadioGroupItem value="half" id="q2-half" />
-              <Label htmlFor="q2-half">Not sure</Label>
+              <RadioGroupItem value="unsure" id="q2-unsure" />
+              <Label htmlFor="q2-unsure">Not sure</Label>
             </div>
           </RadioGroup>
         </div>
