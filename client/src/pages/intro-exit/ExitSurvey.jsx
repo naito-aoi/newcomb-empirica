@@ -33,7 +33,7 @@ export function ExitSurvey({ next }) {
 
   if (player.get("dropoutReason") === "comprehension") {
     // If failed to assign a group
-        const failureHTML = `
+    const failureHTML = `
             <h5>You have failed the comprehension test twice...</h5>
             <br>
             <p>
@@ -44,22 +44,22 @@ export function ExitSurvey({ next }) {
             <br>
             <p>Thank you for your participation!</p>
         `;
-        surveyJson = {
-            "completeText": "Return to Prolific",
-            "elements": [
-                {
-                    "type": "panel",
-                    "name": "exitSurvey",
-                    "elements": [
-                        {
-                            "type": "html",
-                            "name": "exitSurveyInfo",
-                            "html": failureHTML,
-                        }
-                    ]
-                }
-            ]
+    surveyJson = {
+      "completeText": "Return to Prolific",
+      "elements": [
+        {
+          "type": "panel",
+          "name": "exitSurvey",
+          "elements": [
+            {
+              "type": "html",
+              "name": "exitSurveyInfo",
+              "html": failureHTML,
+            }
+          ]
         }
+      ]
+    }
   } else {
     surveyJson = {
       "widthMode": "static",
@@ -155,7 +155,7 @@ export function ExitSurvey({ next }) {
                 "type": "comment",
                 "name": "SuggestionUsage",
                 'textUpdateMode': 'onTyping',
-                "title": "How did the presence of the choice suggestion system influence your decision-making process?",
+                "title": "How did the presence of the prediction system influence your decision-making process?",
                 "rows": 6
               }, {
                 "type": "comment",
@@ -196,21 +196,21 @@ export function ExitSurvey({ next }) {
     // if failed to assign a group
     if (player.get("dropoutReason") === "comprehension") {
       console.log('test');
-        setTimeout(() => {
-            window.location.href = `https://app.prolific.com/submissions/complete?cc=${PROLIFIC_CODE_COMPREHENSION}`; // Redirect to Prolific
-        }, 1000); // To make sure the data is saved
+      setTimeout(() => {
+        window.location.href = `https://app.prolific.com/submissions/complete?cc=${PROLIFIC_CODE_COMPREHENSION}`; // Redirect to Prolific
+      }, 1000); // To make sure the data is saved
     } else if (player.get('dropoutReason') === "completed") {
-        // if all survey questions are answered
-        if (!survey.isCurrentPageHasErrors) {
-            for (let round = 1; round <= treatment.nRound; round++) {
-                window.localStorage.removeItem(`decision-Main ${round}`);
-            }
-            window.localStorage.removeItem(storageItemKey);
-            player.set('exitSurvey', result.data);
-            setTimeout(() => {
-                window.location.href = `https://app.prolific.com/submissions/complete?cc=${PROLIFIC_CODE}`; // Redirect to Prolific
-            }, 1000); // To make sure the data is saved
+      // if all survey questions are answered
+      if (!survey.isCurrentPageHasErrors) {
+        for (let round = 1; round <= treatment.nRound; round++) {
+          window.localStorage.removeItem(`decision-Main ${round}`);
         }
+        window.localStorage.removeItem(storageItemKey);
+        player.set('exitSurvey', result.data);
+        setTimeout(() => {
+          window.location.href = `https://app.prolific.com/submissions/complete?cc=${PROLIFIC_CODE}`; // Redirect to Prolific
+        }, 1000); // To make sure the data is saved
+      }
     }
     next();
   });

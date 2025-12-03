@@ -27,7 +27,7 @@ export function BeliefSlider() {
   const stage = useStage();
   const stageName = stage.get("name");
   const beliefMade = player.round.get("beliefMade");
-  const belief = player.round.get("belief") || 50;
+  const belief = player.round.get("belief") || 0;
   const rationalMade = player.round.get("rationalMade");
   const rational = player.round.get("rational") || "";
 
@@ -61,17 +61,18 @@ export function BeliefSlider() {
         <div className="bg-blue-50 p-4 mb-6 rounded-lg">
           <div className="flex gap-2 mb-3 text-sm font-medium">
             <div>Q1. </div>
-            <div>How accurate do you think the {treatment.isAI ? "AI" : ""} at predicting your choice?</div>
+            {/* <div>How accurate do you think the {treatment.isAI ? "AI" : ""} at predicting your choice?</div> */}
+            <div>How much predictive ability do you think the {treatment.isAI ? "AI" : "wheel"} had for what you would choose?</div>
           </div>
           <div className="flex flex-col items-center gap-2 text-sm font-light text-neutral-500 pl-8">
-            If you think the prediction was completely random, that corresponds to 0% accuracy.
-            If you think the prediction was perfect, that corresponds to 100% accuracy.
+            If you think the {treatment.isAI ? "AI" : "wheel"} had no predictive ability and was completely random, that corresponds to 0.
+            If you think the {treatment.isAI ? "AI" : "wheel"} had perfect predictive ability, that corresponds to 100.
           </div>
         </div>
         <div className="flex flex-col gap-2 px-4 mb-4">
           <div className="flex items-center justify-between mb-2">
             <Label htmlFor="slider">Please drag the slider below<span className="text-red-500">*</span>: </Label>
-            <span className="text-muted-foreground text-sm"><b className="text-blue-500">{belief}</b>%</span>
+            <span className="text-muted-foreground text-sm"><b className="text-blue-500">{belief}</b></span>
           </div>
           <Slider
             id="slider"
@@ -83,8 +84,8 @@ export function BeliefSlider() {
             className="hover:cursor-pointer"
           />
           <div className="flex items-center justify-between text-muted-foreground text-xs tabular-nums">
-            <span className="w-6 text-center">0%</span>
-            <span className="w-6 text-right">100%</span>
+            <span className="w-6 text-center">0</span>
+            <span className="w-6 text-right">100</span>
           </div>
         </div>
         <div className="bg-blue-50 p-4 mt-8 mb-6 rounded-lg">
