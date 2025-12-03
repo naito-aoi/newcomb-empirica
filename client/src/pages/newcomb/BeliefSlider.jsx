@@ -64,9 +64,11 @@ export function BeliefSlider() {
             {/* <div>How accurate do you think the {treatment.isAI ? "AI" : ""} at predicting your choice?</div> */}
             <div>How much predictive ability do you think the {treatment.isAI ? "AI" : "wheel"} had for what you would choose?</div>
           </div>
-          <div className="flex flex-col items-center gap-2 text-sm font-light text-neutral-500 pl-8">
-            If you think the {treatment.isAI ? "AI" : "wheel"} had no predictive ability and was completely random, that corresponds to 0.
-            If you think the {treatment.isAI ? "AI" : "wheel"} had perfect predictive ability, that corresponds to 100.
+          <div className="flex flex-col items-center gap-2 text-xs font-light text-neutral-500 pl-8">
+            If you think the {treatment.isAI ? "AI" : "wheel"} had 0% predictive ability (random) — even if it happened to match your choice on this trial.
+          </div>
+          <div className="flex flex-col items-center gap-2 text-xs font-light text-neutral-500 pl-8 mt-2">
+            This question is about how accurately it could predict your choice, not how much it influenced or affected your decision.
           </div>
         </div>
         <div className="flex flex-col gap-2 px-4 mb-4">
@@ -84,8 +86,15 @@ export function BeliefSlider() {
             className="hover:cursor-pointer"
           />
           <div className="flex items-center justify-between text-muted-foreground text-xs tabular-nums">
-            <span className="w-6 text-center">0</span>
-            <span className="w-6 text-right">100</span>
+            <div>
+              <div className="w-40 text-left font-md text-sm">0%</div>
+              <div className="w-40 text-left text-xs text-neutral-400">no real predictive ability, just random choice</div>
+            </div>
+            <div>
+              <div className="w-40 text-right font-md text-sm"> 100%</div>
+              <div className="w-40 text-right text-xs text-neutral-400">perfect predictive ability</div>
+            </div>
+            {/* <span className="w-30 text-right">100% (perfect predictive ability)</span> */}
           </div>
         </div>
         <div className="bg-blue-50 p-4 mt-8 mb-6 rounded-lg">

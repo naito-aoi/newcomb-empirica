@@ -125,6 +125,18 @@ export function ExitSurvey({ next }) {
                 "html": `<h5>Exit Survey</h5>
                 <p>Please answer the following short survey before completing the study.</p>`
               }, {
+                "type": "radiogroup",
+                "name": "gender",
+                "title": "What is your gender identity?",
+                "isRequired": false,
+                "colCount": 2,
+                "choices": [
+                  "Female",
+                  "Male",
+                  "Non-binary",
+                  "Don't want to answer"
+                ],
+              }, {
                 "type": "dropdown",
                 "name": "education",
                 "title": "What is the highest grade of school or year of college you completed?",
