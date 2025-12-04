@@ -90,12 +90,6 @@ Empirica.onRoundStart(({ round }) => {
   const treatment = round.currentGame.get("treatment");
   const players = round.currentGame.players;
   for (const player of players) {
-    // player.round.set("decisionMade", false);
-    // player.round.set("decision", null);
-    // player.round.set("beliefMade", false);
-    // player.round.set("belief", null);
-    // player.round.set("rationalMade", false);
-    // player.round.set("rational", null);
     if (round.get("task") === "main") {
       player.set("introStep", "Decision Making Task");
       player.set("introStepIndex", 2);

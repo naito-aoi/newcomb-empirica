@@ -30,15 +30,21 @@ export function BeliefSlider() {
   const belief = player.round.get("belief") || 0;
   const rationalMade = player.round.get("rationalMade");
   const rational = player.round.get("rational") || "";
+  const varianceMade = player.round.get("varianceMade");
+  const variance = player.round.get("variance") || "";
 
   const sliderChanged = (val) => {
     // setValue(val);
     player.round.set("belief", val[0]);
     player.round.set("beliefMade", true);
   }
-  const raditoChanged = (val) => {
+  const radioQ2Changed = (val) => {
     player.round.set("rational", val);
     player.round.set("rationalMade", true);
+  }
+  const radioQ3Changed = (val) => {
+    player.round.set("variance", val);
+    player.round.set("varianceMade", true);
   }
 
   if (stageName !== "belief") {
@@ -61,20 +67,24 @@ export function BeliefSlider() {
         <div className="bg-blue-50 p-4 mb-6 rounded-lg">
           <div className="flex gap-2 mb-3 text-sm font-medium">
             <div>Q1. </div>
-            {/* <div>How accurate do you think the {treatment.isAI ? "AI" : ""} at predicting your choice?</div> */}
-            <div>How much predictive ability do you think the {treatment.isAI ? "AI" : "wheel"} had for what you would choose?</div>
+            {/* <div>How much predictive ability do you think the {treatment.isAI ? "AI" : "wheel"} had for what you would choose?</div> */}
+            <div>
+              <div>
+                Imagine playing this task 100 times, starting fresh each time.
+              </div>
+              <div className="mt-2">
+                How many times do you think the {treatment.isAI ? "AI would correctly predict" : "wheel would correctly indicate"} your choice?
+              </div>
+            </div>
           </div>
-          <div className="flex flex-col items-center gap-2 text-xs font-light text-neutral-500 pl-8">
-            If you think the {treatment.isAI ? "AI" : "wheel"} had 0% predictive ability (random) — even if it happened to match your choice on this trial.
-          </div>
-          <div className="flex flex-col items-center gap-2 text-xs font-light text-neutral-500 pl-8 mt-2">
-            This question is about how accurately it could predict your choice, not how much it influenced or affected your decision.
+          <div className="flex flex-col items-start gap-2 text-xs font-light text-neutral-500 pl-7">
+            Please drag the slider below.
           </div>
         </div>
         <div className="flex flex-col gap-2 px-4 mb-4">
           <div className="flex items-center justify-between mb-2">
-            <Label htmlFor="slider">Please drag the slider below<span className="text-red-500">*</span>: </Label>
-            <span className="text-muted-foreground text-sm"><b className="text-blue-500">{belief}</b></span>
+            <Label htmlFor="slider"><span className="text-red-500">*</span>The {treatment.isAI ? "AI would be correct" : "wheel would be correct"}</Label>
+            <span className="text-muted-foreground text-sm"><b className="text-lg text-blue-500">{belief}</b> out of 100 times</span>
           </div>
           <Slider
             id="slider"
@@ -87,12 +97,16 @@ export function BeliefSlider() {
           />
           <div className="flex items-center justify-between text-muted-foreground text-xs tabular-nums">
             <div>
-              <div className="w-40 text-left font-md text-sm">0%</div>
-              <div className="w-40 text-left text-xs text-neutral-400">no real predictive ability, just random choice</div>
+              <div className="w-30 text-left font-md text-sm">0</div>
+              <div className="w-30 text-left text-xs text-neutral-400">Always wrong</div>
             </div>
             <div>
-              <div className="w-40 text-right font-md text-sm"> 100%</div>
-              <div className="w-40 text-right text-xs text-neutral-400">perfect predictive ability</div>
+              <div className="w-30 text-center font-md text-sm">50</div>
+              <div className="w-30 text-center text-xs text-neutral-400">Random</div>
+            </div>
+            <div>
+              <div className="w-30 text-right font-md text-sm"> 100</div>
+              <div className="w-30 text-right text-xs text-neutral-400">Always correct</div>
             </div>
             {/* <span className="w-30 text-right">100% (perfect predictive ability)</span> */}
           </div>
@@ -104,24 +118,67 @@ export function BeliefSlider() {
           </div>
         </div>
         <div className="flex flex-col gap-2 px-4 mb-8">
-          <Label htmlFor="q2-radio" className="mb-2">Please select one option below<span className="text-red-500">*</span>:</Label>
+          <Label htmlFor="q2-radio" className="mb-2"><span className="text-red-500">*</span>Please select one option below:</Label>
           <RadioGroup
             id="q2-radio"
             value={rational || ""}
-            onValueChange={val => raditoChanged(val)}
+            onValueChange={val => radioQ2Changed(val)}
             className="flex flex-col gap-2"
           >
             <div className="flex items-center gap-2">
               <RadioGroupItem value="2box" id="q2-2box" />
-              <Label htmlFor="q2-2box">Taking both Box A and Box B</Label>
+              <Label htmlFor="q2-2box" className="text-neutral-700">Taking both Box A and Box B</Label>
             </div>
             <div className="flex items-center gap-2">
               <RadioGroupItem value="1box" id="q2-1box" />
-              <Label htmlFor="q2-1box">Taking only Box B</Label>
+              <Label htmlFor="q2-1box" className="text-neutral-700">Taking only Box B</Label>
             </div>
             <div className="flex items-center gap-2">
               <RadioGroupItem value="unsure" id="q2-unsure" />
-              <Label htmlFor="q2-unsure">Not sure</Label>
+              <Label htmlFor="q2-unsure" className="text-neutral-700">Not sure</Label>
+            </div>
+          </RadioGroup>
+        </div>
+        <div className="bg-blue-50 p-4 mt-8 mb-6 rounded-lg">
+          <div className="flex gap-2 mb-3 text-sm font-medium">
+            <div>Q3. </div>
+            <div>
+              <div>
+                Imagine everything in this task were the same, except that you had chosen the other option instead of the one you actually picked.
+              </div>
+              <div className="mt-2">
+                Do you think the {treatment.isAI ? "AI" : "wheel"} would have predicted a different option from that made for you, or kept it the same?
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 px-4 mb-8">
+          <Label htmlFor="q3-radio" className="mb-2"><span className="text-red-500">*</span>Please select one option below:</Label>
+          <RadioGroup
+            id="q3-radio"
+            value={variance || ""}
+            onValueChange={val => radioQ3Changed(val)}
+            className="flex flex-col gap-2"
+          >
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="definitely-same" id="q3-definitely-same" />
+              <Label htmlFor="q3-definitely-same" className="text-neutral-700">Definitely the same prediction</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="probably-same" id="q3-probably-same" />
+              <Label htmlFor="q3-probably-same" className="text-neutral-700">Probably the same prediction</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="unsure" id="q3-unsure" />
+              <Label htmlFor="q3-unsure" className="text-neutral-700">Not sure</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="probably-different" id="q3-probably-different" />
+              <Label htmlFor="q3-probably-different" className="text-neutral-700">Probably the different prediction</Label>
+            </div>
+            <div className="flex items-center gap-2">
+              <RadioGroupItem value="definitely-different" id="q3-definitely-different" />
+              <Label htmlFor="q3-definitely-different" className="text-neutral-700">Definitely the different prediction</Label>
             </div>
           </RadioGroup>
         </div>

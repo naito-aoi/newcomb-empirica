@@ -13,7 +13,7 @@ export function OperationButton() {
 
     const stageName = stage.get("name");
     const buttonShown = !stageName || pdStep === "finished";
-    const beliefFilled = stageName === "belief" && player.round.get("beliefMade") && player.round.get("rationalMade");
+    const beliefFilled = stageName === "belief" && player.round.get("beliefMade") && player.round.get("rationalMade") && player.round.get("varianceMade");
     const buttonText = (stageName === "choice") ? "Confirm" : "Next";
 
     return (

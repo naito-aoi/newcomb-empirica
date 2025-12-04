@@ -38,7 +38,7 @@ export function HeaderUI() {
             <div className="text-xl">Decision Making Task</div>
             <div className="mr-2 mt-4">
                 <div className="text-sm font-light">
-                    Please answer the questions about the choice you have made.
+                    Please answer the questions below.
                 </div>
             </div>
         </>
