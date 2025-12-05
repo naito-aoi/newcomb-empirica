@@ -411,6 +411,8 @@ export function Tutorial({ next }) {
                                     </h5>
                                     <p>
                                         Once you finish reading this tutorial, <b>you will interact with <span id="ai-avatar">the AI</span></b> before moving to the point management task and receive suggestions.
+                                        This <span id="ai-avatar">AI system</span> works by analyzing patterns in human data.
+                                        AI models often make predictions about user intentions or likely next actions as part of how they generate responses.
                                     </p>
                                     <p>
                                         <span id="ai-avatar">The AI</span> will ask you some questions about your thoughts about the task and provide feedback based on your responses. Let's enjoy the conversation with <span id="ai-avatar">the AI</span>!

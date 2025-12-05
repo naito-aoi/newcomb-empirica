@@ -26,12 +26,8 @@ export function BeliefSlider() {
 
   const stage = useStage();
   const stageName = stage.get("name");
-  const beliefMade = player.round.get("beliefMade");
   const belief = player.round.get("belief") || 0;
-  const rationalMade = player.round.get("rationalMade");
   const rational = player.round.get("rational") || "";
-  const varianceMade = player.round.get("varianceMade");
-  const variance = player.round.get("variance") || "";
 
   const sliderChanged = (val) => {
     // setValue(val);
@@ -41,10 +37,6 @@ export function BeliefSlider() {
   const radioQ2Changed = (val) => {
     player.round.set("rational", val);
     player.round.set("rationalMade", true);
-  }
-  const radioQ3Changed = (val) => {
-    player.round.set("variance", val);
-    player.round.set("varianceMade", true);
   }
 
   if (stageName !== "belief") {
@@ -136,49 +128,6 @@ export function BeliefSlider() {
             <div className="flex items-center gap-2">
               <RadioGroupItem value="unsure" id="q2-unsure" />
               <Label htmlFor="q2-unsure" className="text-neutral-700">Not sure</Label>
-            </div>
-          </RadioGroup>
-        </div>
-        <div className="bg-blue-50 p-4 mt-8 mb-6 rounded-lg">
-          <div className="flex gap-2 mb-3 text-sm font-medium">
-            <div>Q3. </div>
-            <div>
-              <div>
-                Imagine everything in this task were the same, except that you had chosen the other option instead of the one you actually picked.
-              </div>
-              <div className="mt-2">
-                Do you think the {treatment.isAI ? "AI" : "wheel"} would have predicted a different option from that made for you, or kept it the same?
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex flex-col gap-2 px-4 mb-8">
-          <Label htmlFor="q3-radio" className="mb-2"><span className="text-red-500">*</span>Please select one option below:</Label>
-          <RadioGroup
-            id="q3-radio"
-            value={variance || ""}
-            onValueChange={val => radioQ3Changed(val)}
-            className="flex flex-col gap-2"
-          >
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="definitely-same" id="q3-definitely-same" />
-              <Label htmlFor="q3-definitely-same" className="text-neutral-700">Definitely the same prediction</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="probably-same" id="q3-probably-same" />
-              <Label htmlFor="q3-probably-same" className="text-neutral-700">Probably the same prediction</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="unsure" id="q3-unsure" />
-              <Label htmlFor="q3-unsure" className="text-neutral-700">Not sure</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="probably-different" id="q3-probably-different" />
-              <Label htmlFor="q3-probably-different" className="text-neutral-700">Probably the different prediction</Label>
-            </div>
-            <div className="flex items-center gap-2">
-              <RadioGroupItem value="definitely-different" id="q3-definitely-different" />
-              <Label htmlFor="q3-definitely-different" className="text-neutral-700">Definitely the different prediction</Label>
             </div>
           </RadioGroup>
         </div>

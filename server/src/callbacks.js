@@ -107,7 +107,7 @@ Empirica.onStageEnded(({ stage }) => {
 
   for (const player of players) {
     const playerChoice = player.round.get("decision");
-    const playerScore = (playerChoice === "1box") ? bonusConfig.newcombBoxBValue : bonusConfig.newcombBoxAValue + bonusConfig.newcombBoxBValue;
+    const playerScore = (playerChoice === "1box") ? bonusConfig.newcombBoxBValue : (playerChoice === "2box") ? bonusConfig.newcombBoxAValue + bonusConfig.newcombBoxBValue : 0;
     player.round.set("playerScore", playerScore);
 
     const currentScore = player.get("playerScore") || 0;
