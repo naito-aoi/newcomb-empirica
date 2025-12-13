@@ -92,7 +92,11 @@ Empirica.onRoundStart(({ round }) => {
   for (const player of players) {
     if (round.get("task") === "main") {
       player.set("introStep", "Decision Making Task");
-      player.set("introStepIndex", 2);
+      if (treatment.isInteractive) {
+        player.set("introStepIndex", 2);
+      } else {
+        player.set("introStepIndex", 1);
+      }
     }
   }
 });
@@ -107,7 +111,11 @@ Empirica.onStageEnded(({ stage }) => {
 
   for (const player of players) {
     const playerChoice = player.round.get("decision");
-    const playerScore = (playerChoice === "1box") ? bonusConfig.newcombBoxBValue : (playerChoice === "2box") ? bonusConfig.newcombBoxAValue + bonusConfig.newcombBoxBValue : 0;
+    const predictedChoice = (treatment.isAI) ? "1box" : player.round.get("drawnLabel");
+    const contentsOfBoxB = (predictedChoice === "1box") ? bonusConfig.newcombBoxBValue : 0;
+    const playerScore = (playerChoice === "1box") ? contentsOfBoxB : (playerChoice === "2box") ? bonusConfig.newcombBoxAValue + contentsOfBoxB : 0;
+    // const playerScore = (playerChoice === "1box") ? bonusConfig.newcombBoxBValue : (playerChoice === "2box") ? bonusConfig.newcombBoxAValue + bonusConfig.newcombBoxBValue : 0;
+
     player.round.set("playerScore", playerScore);
 
     const currentScore = player.get("playerScore") || 0;
@@ -129,5 +137,13 @@ Empirica.onGameEnded(({ game }) => {
 
     player.set("introStep", "Exit Survey");
     player.set("introStepIndex", 3);
+  }
+});
+
+Empirica.on("player", "drawLabel", (ctx, { player, drawLabel }) => {
+  if (drawLabel) {
+    const label = Math.random() < 0.5 ? "1box" : "2box";
+    player.round.set("drawnLabel", label);
+    player.set("drawLabel", false);
   }
 });

@@ -14,6 +14,11 @@ factors:
     values:
       - value: false
       - value: true
+  - desc:
+    name: isInteractive
+    values:
+      - value: false
+      - value: true
   - desc: Number of rounds in the game.
     name: nRound
     values:
@@ -25,6 +30,7 @@ treatments:
       playerCount: 1
       allocatorType: random
       isAI: false
+      isInteractive: false
       nRound: 1
     name: exp1-random
   - desc: "exp1-silentAI"
@@ -32,6 +38,7 @@ treatments:
       playerCount: 1
       allocatorType: silentAI
       isAI: true
+      isInteractive: false
       nRound: 1
     name: exp1-silentAI
   - desc: "exp2-random"
@@ -39,6 +46,7 @@ treatments:
       playerCount: 1
       allocatorType: random
       isAI: false
+      isInteractive: false
       nRound: 1
     name: exp2-random
   - desc: "exp2-silentAI"
@@ -46,6 +54,7 @@ treatments:
       playerCount: 1
       allocatorType: silentAI
       isAI: true
+      isInteractive: false
       nRound: 1
     name: exp2-silentAI
   - desc: "exp2-generativeAI"
@@ -53,5 +62,6 @@ treatments:
       playerCount: 1
       allocatorType: generativeAI
       isAI: true
+      isInteractive: true
       nRound: 1
     name: exp2-generativeAI

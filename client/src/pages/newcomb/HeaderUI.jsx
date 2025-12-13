@@ -13,6 +13,10 @@ export function HeaderUI() {
     const newcombBoxAValue = player.get("newcombBoxAValue");
     const newcombBoxBValue = player.get("newcombBoxBValue");
 
+    const playerChoice = player.round.get("decision");
+    const predictedChoice = (treatment.isAI) ? "1box" : player.round.get("drawnLabel");
+    const contentsOfBoxB = (predictedChoice === "1box") ? newcombBoxBValue : 0;
+
 
     const choiceUI = (
         <>
@@ -21,12 +25,12 @@ export function HeaderUI() {
                 <div id="custom" className="text-sm font-light">
                     <ol className="list-disc list-outside">
                         <li>
-                            <b>Box A</b> is transparent, and <b>${newcombBoxAValue}</b> is guaranteed if opened.
-                            <b> Box B</b> is opaque, and the content inside is either <b>$0</b> or <b>${newcombBoxBValue}</b>.
+                            <b>${newcombBoxAValue}</b> is guaranteed in <b>Box A</b> if opened.
+                            The contents of <b>Box B</b> are either <b>$0</b> or <b>${newcombBoxBValue}</b>.
                         </li>
                         <li>
-                            If {(treatment.isAI) ? <><span id="ai-avatar">the AI</span> predicts</> : <><span id="ai-avatar">the wheel</span> indicates</>} that you will <span id="one-boxer">open only Box B</span>, it should have placed <b>${newcombBoxBValue}</b> in Box B.
-                            If {(treatment.isAI) ? <><span id="ai-avatar">the AI</span> predicts</> : <><span id="ai-avatar">the wheel</span> indicates</>} that you will <span id="two-boxer">open both boxes</span>, it should have placed <b>$0</b> in Box B.
+                            If {(treatment.isAI) ? <> <span id="ai-avatar">the AI</span> predicts that you will <span id="two-boxer">open both boxes</span></> : <><span id="ai-avatar">the random generator</span> draws "<span id="two-boxer">Two Boxes</span>" label</>}, the contents of Box B is already set to <b>$0</b>.
+                            If {(treatment.isAI) ? <><span id="ai-avatar">the AI</span> predicts that you will <span id="one-boxer">open only Box B</span></> : <><span id="ai-avatar">the random generator</span> draws "<span id="one-boxer">One Box</span>" label</>}, the contents of Box B is already set to <b>${newcombBoxBValue}</b>.
                         </li>
                     </ol>
                 </div>
@@ -48,14 +52,14 @@ export function HeaderUI() {
             <div className="text-xl">Result</div>
             <div className="mr-2 mt-4">
                 <div className="text-sm font-light">
-                    {(treatment.isAI) ? <><span id="ai-avatar">The AI</span> predicted</> : <><span id="ai-avatar">The wheel</span> indicated</>} that you would choose to
+                    {(treatment.isAI) ? <><span id="ai-avatar">The AI</span> predicted that you would choose to</> : <><span id="ai-avatar">The random generator</span> drew</>}
                 </div>
                 <div className="font-light text-sm">
-                    <span id="one-boxer">
-                        open only Box B &nbsp;
+                    <span id={`${(predictedChoice === "1box") ? "one-boxer" : "two-boxer"}`}>
+                        {(predictedChoice === "1box") ? "One Box" : "Two Boxes"} &nbsp;
                     </span>
                     <span>
-                        and set Box B to contain <b>${newcombBoxBValue}</b>.
+                        and set Box B to contain <b>${contentsOfBoxB}</b>.
                     </span>
                 </div>
             </div>

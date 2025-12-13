@@ -12,6 +12,7 @@ export function ResultUI() {
     const player = usePlayer();
     const playerAvatar = player.get("avatar");
     const playerDecision = player.round.get("decision");
+    const drawnLabel = player.round.get("drawnLabel");
 
     const stage = useStage();
     const stageName = stage.get("name");
@@ -41,7 +42,7 @@ export function ResultUI() {
                         <div className="border-l-1 border-gray-200 h-30 ml-1 mr-3 my-auto"></div>
                         <div className="flex flex-col items-start gap-2 text-lg my-auto ml-2">
                             <div className="text-neutral-600">
-                                <span id={(player.round.get("decision") === "1box") ? "one-boxer" : (player.round.get("decision") === "2box") ? "two-boxer" : ""} className="font-semibold">{(!player.round.get("decision")) ? "Miss" : (player.round.get("decision") === "1box") ? "Open only Box B" : "Open both boxes"}</span>
+                                <span id={(player.round.get("decision") === "1box") ? "one-boxer" : (player.round.get("decision") === "2box") ? "two-boxer" : ""} className="font-semibold">{(!player.round.get("decision")) ? "Miss" : (player.round.get("decision") === "1box") ? "Open Box B only" : "Open Box A and Box B"}</span>
                             </div>
                             <div className="text-neutral-600">
                                 <span className="font-light">Earning: </span><span className="font-semibold">${player.round.get("playerScore")}</span>
@@ -57,7 +58,7 @@ export function ResultUI() {
                 <div className="w-64">
                     <div className="flex h-full items-start bg-white p-3 rounded-xl shadow border-1 border-neutral-200">
                         <div className="flex flex-col items-center">
-                            <img src={`/fig/Newcomb/Newcomb-result-${playerDecision}.png`} className="mx-auto" />
+                            <img src={`/fig/Newcomb/Newcomb-result-${playerDecision}-${drawnLabel}.png`} className="mx-auto" />
                         </div>
                     </div>
                 </div>

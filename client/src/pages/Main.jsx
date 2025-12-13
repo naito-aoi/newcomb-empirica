@@ -47,21 +47,14 @@ export function Main() {
         <div className="flex items-start max-h-250 justify-center h-full w-full p-8">
             <div className="flex flex-col w-2xl min-w-2xl h-full overflow-hidden shadow-xl bg-white">
                 <div className="relative h-60 w-full p-4 border-b font-bold flex">
-                    <div className="absolute w-300px">
-                        {(treatment.isAI) ?
+                    {(treatment.isInteractive) &&
+                        <div className="absolute w-300px">
                             <FloatingRobotAvatar />
-                            :
-                            <DotLottieReact
-                                src="/json/lottery.json"
-                                loop
-                                dotLottieRefCallback={(dotLottie) => {
-                                    dotLottieRef.current = dotLottie;
-                                }}
-                                className="w-90 my-4"
-                            />
-                        }
-                    </div>
-                    <div className="relative w-[calc(100%-300px)] flex flex-col justify-between ml-auto">
+                        </div>
+                    }
+                    <div
+                        className={`relative flex flex-col justify-between ${treatment.isInteractive ? "w-[calc(100%-300px)] ml-auto" : "w-[calc(100%-60px)] ml-8"}`}
+                    >
                         <div className="h-50">
                             <HeaderUI />
                         </div>

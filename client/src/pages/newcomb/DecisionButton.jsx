@@ -14,13 +14,16 @@ export function DecisionButton() {
     // decisionはlocal storageに保存
     const [decision, setDecision] = useState(player.get("decision") || "");
 
-    const options =  [
+    const newcombBoxAValue = player.get('newcombBoxAValue');
+    const newcombBoxBValue = player.get('newcombBoxBValue');
+
+    const options = [
         { value: "2box", label: "Open both boxes", imgSrc: "/fig/Newcomb/Newcomb-system-2box.png" },
-        { value: "1box", label: "Open only Box B", imgSrc: "/fig/Newcomb/Newcomb-system-1box.png" },
+        { value: "1box", label: "Open Box B only", imgSrc: "/fig/Newcomb/Newcomb-system-1box.png" },
     ];
 
     // Newcomb のときは縦並び (flex-col)、それ以外は横並び (flex items-center)
-    const optionClass = `w-70 border cursor-pointer rounded-md p-4 flex flex-col gap-2 shadow-lg [&:has(:checked)]:shadow-sm [&:not(:has(:checked))]:hover:bg-zinc-50 [&:has(:checked)]:bg-zinc-100 dark:[&:has(:checked)]:bg-zinc-800`;
+    const optionClass = `w-70 border cursor-pointer rounded-md py-2 px-4 flex flex-col gap-2 shadow-lg [&:has(:checked)]:shadow-sm [&:not(:has(:checked))]:hover:bg-zinc-50 [&:has(:checked)]:bg-zinc-100 dark:[&:has(:checked)]:bg-zinc-800`;
 
     // プレイヤーの選択を保存
     function handleOptionChange(value) {
@@ -32,15 +35,22 @@ export function DecisionButton() {
 
     return (
         (pdStep === 'decision' || pdStep === 'finished') ? (
-            <form className="h-50 space-y-4 mt-auto mb-4">
+            <form className="h-55 space-y-4 mt-auto mb-4">
                 <RadioGroup value={decision} onValueChange={handleOptionChange} id="ai-conversation" className="flex items-start gap-4">
                     <Label
                         htmlFor={`${options[0].value}`}
                         className={optionClass}
                     >
-                        <div className="flex items-center gap-2 text-lg font-semibold text-[#31cc31]">
+                        {/* <div className="flex items-center gap-2 text-lg font-semibold text-[#31cc31]">
                             <RadioGroupItem id={options[0].value} value={options[0].value} />
                             {options[0].label}
+                        </div> */}
+                        <div className="flex">
+                            <RadioGroupItem id={options[0].value} value={options[0].value} className="mt-2" />
+                            <div className="flex flex-col items-start justify-start ml-5">
+                                <div className="text-lg font-semibold text-[#31cc31]">{options[0].label}</div>
+                                <div className="text-xs text-neutral-500">fixed ${newcombBoxAValue} + {(treatment.isAI) ? `${newcombBoxBValue} set by AI` : `a chance of $0 / $${newcombBoxBValue}`}</div>
+                            </div>
                         </div>
                         <img src={`${options[0].imgSrc}`} className="mx-auto h-28 mr-2" />
                     </Label>
@@ -48,9 +58,12 @@ export function DecisionButton() {
                         htmlFor={options[1].value}
                         className={optionClass}
                     >
-                        <div className="flex items-center gap-2 text-lg font-semibold text-[#9e3dff]">
-                            <RadioGroupItem id={options[1].value} value={options[1].value} />
-                            {options[1].label}
+                        <div className="flex">
+                            <RadioGroupItem id={options[1].value} value={options[1].value} className="mt-2" />
+                            <div className="flex flex-col items-start justify-start ml-5">
+                                <div className="text-lg font-semibold text-[#9e3dff]">{options[1].label}</div>
+                                <div className="text-xs text-neutral-500">{(treatment.isAI) ? `${newcombBoxBValue} set by AI` : `a chance of $0 / $${newcombBoxBValue}`}</div>
+                            </div>
                         </div>
                         <img src={`${options[1].imgSrc}`} className="mx-auto h-28 mr-2" />
                     </Label>

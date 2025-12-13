@@ -80,29 +80,33 @@ export function WheelPrediction() {
                         onClick={async () => {
                             // 表示を先に message にしてロード状態にする
                             player.round.set("pdStep", "message");
+                            // console.log("drawnLabel-before", player.round.get("drawnLabel"));
+                            // draw
+                            player.set('drawLabel', true);
 
                             // 5秒待機
                             await new Promise((resolve) => setTimeout(resolve, 5000));
+                            // console.log("drawnLabel-after", player.round.get("drawnLabel"));
 
                             const currentHistory = Array.isArray(player.round.get("chatHistory-suggestion")) ? player.round.get("chatHistory-suggestion") : [];
                             player.round.set("chatHistory-suggestion", [
                                 ...currentHistory,
-                                { role: "assistant", content: `${(treatment.isAI) ? "The AI has predicted your choice and fixed the contents in Box B!" : "The wheel has indicated your choice and fixed the contents in Box B!"}` }
+                                { role: "assistant", content: `${(treatment.isAI) ? "The AI has predicted your choice and fixed the contents in Box B!" : "The random generator has drawn a label and fixed the contents in Box B!"}` }
                             ]);
                         }}
                     >
-                        {(treatment.isAI) ? "Start prediction" : "Spin the wheel"}
+                        {(treatment.isAI) ? "Start prediction" : "Draw a label"}
                     </Button>
                 </div>
             ) : (
                 <></>
             )}
-            <Conversation id="ai-conversation" className="w-full h-50 mb-auto" style={{ height: '500px' }}>
+            <Conversation id="ai-conversation" className="w-full h-50 mb-auto px-4" style={{ height: '500px' }}>
                 <ConversationContent>
                     {(pdStep === "instruction") ? (
                         <ConversationEmptyState
                             title="No result yet."
-                            description={`Please click "${(treatment.isAI) ? "Start prediction" : "Spin the wheel"}" button above.`}
+                            description={`Please click "${(treatment.isAI) ? "Start prediction" : "Draw a label"}" button above.`}
                         />
                     ) : (
                         messageStream.map((message, index) => (
@@ -110,7 +114,7 @@ export function WheelPrediction() {
                                 <MessageContent>
                                     <Response components={customComponents}>{message.content}</Response>
                                 </MessageContent>
-                                <MessageAvatar src={`${(treatment.isAI) ? `/fig/icon/assistant/assistant-icon.svg` : `/fig/icon/assistant/wheel-icon.svg`}`} />
+                                {/* <MessageAvatar src={`${(treatment.isAI) ? `/fig/icon/assistant/assistant-icon.svg` : `/fig/icon/assistant/wheel-icon.svg`}`} /> */}
                             </Message>
                         ))
                     )}
@@ -118,7 +122,7 @@ export function WheelPrediction() {
                         <>
                             <div className="flex items-center mx-1 gap-2">
                                 {showSecondMessage ? <CircleCheckBigIcon className="w-4 h-4 text-neutral-400" /> : <Loader size={16} className="text-neutral-400" />}
-                                <span className={`text-sm text-neutral-400 font-light ${showSecondMessage ? "animate-pulse" : ""}`}>{(treatment.isAI) ? "AI is predicting your choice..." : "Spinning the random picker wheel..."}</span>
+                                <span className={`text-sm text-neutral-400 font-light ${showSecondMessage ? "animate-pulse" : ""}`}>{(treatment.isAI) ? "AI is predicting your choice..." : "The random generator is drawing a label..."}</span>
                             </div>
                         </>
                     )}

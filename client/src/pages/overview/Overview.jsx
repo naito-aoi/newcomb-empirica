@@ -23,7 +23,7 @@ export function Overview() {
   const treatment = game.get("treatment");
   const player = usePlayer();
 
-  const steps = [
+  const stepsInteractive = [
     {
       label: 'Tutorial',
       description: '3 min',
@@ -41,6 +41,20 @@ export function Overview() {
       description: `5 min`,
     },
   ];
+  const stepSimple = [
+    {
+      label: 'Tutorial',
+      description: '3 min',
+    }, {
+      label: 'Decision making task',
+      description: `5 min`,
+    }, {
+      label: 'Exit survey',
+      description: `5 min`,
+    },
+  ];
+  const steps = (treatment.isInteractive) ? stepsInteractive : stepSimple;
+
   const activeStep = player.get('introStepIndex');
   const introStep = player.get("introStep");
 

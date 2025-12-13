@@ -65,7 +65,7 @@ export function BeliefSlider() {
                 Imagine playing this task 100 times, starting fresh each time.
               </div>
               <div className="mt-2">
-                How many times do you think the {treatment.isAI ? "AI would correctly predict" : "wheel would correctly indicate"} your choice?
+                How many times do you think the {treatment.isAI ? `AI would correctly predict` : `the labels ("Two Boxes" / "One Box") drawn by the random generator will match`} your choice?
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@ export function BeliefSlider() {
         </div>
         <div className="flex flex-col gap-2 px-4 mb-4">
           <div className="flex items-center justify-between mb-2">
-            <Label htmlFor="slider"><span className="text-red-500">*</span>The {treatment.isAI ? "AI would be correct" : "wheel would be correct"}</Label>
+            <Label htmlFor="slider"><span className="text-red-500">*</span>The {treatment.isAI ? "AI would be correct" : "labels would match"}</Label>
             <span className="text-muted-foreground text-sm"><b className="text-lg text-blue-500">{belief}</b> out of 100 times</span>
           </div>
           <Slider
@@ -90,7 +90,7 @@ export function BeliefSlider() {
           <div className="flex items-center justify-between text-muted-foreground text-xs tabular-nums">
             <div>
               <div className="w-30 text-left font-md text-sm">0</div>
-              <div className="w-30 text-left text-xs text-neutral-400">Always wrong</div>
+              <div className="w-30 text-left text-xs text-neutral-400">Always {treatment.isAI ? "wrong" : "mismatched"}</div>
             </div>
             <div>
               <div className="w-30 text-center font-md text-sm">50</div>
@@ -98,7 +98,7 @@ export function BeliefSlider() {
             </div>
             <div>
               <div className="w-30 text-right font-md text-sm"> 100</div>
-              <div className="w-30 text-right text-xs text-neutral-400">Always correct</div>
+              <div className="w-30 text-right text-xs text-neutral-400">Always {treatment.isAI ? "correct" : "matched"}</div>
             </div>
             {/* <span className="w-30 text-right">100% (perfect predictive ability)</span> */}
           </div>
@@ -106,7 +106,7 @@ export function BeliefSlider() {
         <div className="bg-blue-50 p-4 mt-8 mb-6 rounded-lg">
           <div className="flex gap-2 mb-3 text-sm font-medium">
             <div>Q2. </div>
-            <div>In this task, which choice do you think was the more rational one?</div>
+            <div>In this task, which choice do you think is the more rational?</div>
           </div>
         </div>
         <div className="flex flex-col gap-2 px-4 mb-8">

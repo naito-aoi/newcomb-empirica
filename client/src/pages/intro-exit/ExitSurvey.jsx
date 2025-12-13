@@ -77,42 +77,27 @@ export function ExitSurvey({ next }) {
                   "type": "html",
                   "name": "decisionResult",
                   "html": `
-                    <h5>Task Result</h5>
-                    <br>
-                    <p>
-                      You have completed the <b>Decision Making Task</b>!
-                    </p>
-                    <p id="result-text">
-                      Your bonus for this study is <b>$${totalScore}</b>.
-                    </p>
-                  `
+            <h5>Task Result</h5>
+            <br>
+            <p>
+              You have completed the <b>Decision Making Task</b>!
+            </p>
+            <p id="result-text">
+              Your bonus for this study is <b>$${totalScore}</b>.
+            </p>
+            `
                 }, {
                   "type": "html",
                   "name": "decisionResult",
                   "html": `
-                      <p>
-                          Please click <b>"Next"</b> to answer the follow-up survey and complete this study.
-                      </p>
-                  `
+              <p>
+                Please click <b>"Next"</b> to answer the follow-up survey and complete this study.
+              </p>
+            `
                 }
               ]
             }
           ]
-        }, {
-          "name": "page2",
-          "elements": SoepSurvey,
-        }, {
-          "name": "page3",
-          "elements": RiskSurvey,
-        }, {
-          "name": "page4",
-          "elements": IdeologySurvey,
-        }, {
-          "name": "page5",
-          "elements": AiLiteracySurvey,
-        }, {
-          "name": "page6",
-          "elements": DeterminismSurvey,
         }, {
           "name": "page7",
           "elements": {
@@ -123,12 +108,12 @@ export function ExitSurvey({ next }) {
                 "type": "html",
                 "name": "exitSurveyInfo",
                 "html": `<h5>Exit Survey</h5>
-                <p>Please answer the following short survey before completing the study.</p>`
+          <p>Please answer the following short survey before completing the study.</p>`
               }, {
                 "type": "radiogroup",
                 "name": "gender",
                 "title": "What is your gender identity?",
-                "isRequired": false,
+                "isRequired": true,
                 "colCount": 2,
                 "choices": [
                   "Female",
@@ -140,7 +125,7 @@ export function ExitSurvey({ next }) {
                 "type": "dropdown",
                 "name": "education",
                 "title": "What is the highest grade of school or year of college you completed?",
-                "isRequired": false,
+                "isRequired": true,
                 "choices": [
                   "High school or less",
                   "Some college (1-3 years)",
@@ -153,7 +138,7 @@ export function ExitSurvey({ next }) {
                 "type": "dropdown",
                 "name": "salary",
                 "title": "About how much wage and salary did you receive in the last year? It includes any type of income, such as a pension.",
-                "isRequired": false,
+                "isRequired": true,
                 "choices": [
                   "Less than $20,000",
                   "$20,000 - $34,999",
@@ -165,15 +150,24 @@ export function ExitSurvey({ next }) {
                 ],
               }, {
                 "type": "comment",
-                "name": "SuggestionUsage",
+                "name": "DecisionProcess",
                 'textUpdateMode': 'onTyping',
-                "title": "How did the presence of the prediction system influence your decision-making process?",
+                "title": "Please tell us what you focused on and your decision-making process in this task.",
+                "isRequired": true,
                 "rows": 6
               }, {
                 "type": "comment",
-                "name": "reasonOfYourPrediction",
+                "name": "PredictionSystem",
+                'textUpdateMode': 'onTyping',
+                "title": `How did the presence of the ${treatment.isAI ? "AI prediction system" : "random generator"} influence your decision-making process?`,
+                "isRequired": true,
+                "rows": 6
+              }, {
+                "type": "comment",
+                "name": "Confusion",
                 'textUpdateMode': 'onTyping',
                 "title": "Was there any part of these tasks that was confusing or unclear? We'd appreciate any feedback.",
+                "isRequired": true,
                 "rows": 6
               }
             ],
