@@ -29,18 +29,18 @@ export function Introduction({ next }) {
 
   const [collapsed, setCollapsed] = useState(false);
 
-  console.log("introStepIndex", introStepIndex);
+  // console.log("introStepIndex", introStepIndex);
 
   let content;
   switch (introStepIndex) {
     case 1:
-    //   content = (
-    //     <div className="flex items-start max-h-250 justify-center h-full w-full p-8">
-    //       <ExpectationSurvey />
-    //     </div>
-    //   );
-    //   break;
-    // case 2:
+      //   content = (
+      //     <div className="flex items-start max-h-250 justify-center h-full w-full p-8">
+      //       <ExpectationSurvey />
+      //     </div>
+      //   );
+      //   break;
+      // case 2:
       content = (
         <div className="flex items-start max-h-250 justify-center h-full w-full p-8">
           {(treatment.allocatorType === 'generativeAI') ? <AIInteraction /> : <NonAIInteraction />}

@@ -14,7 +14,8 @@ const PROLIFIC_CODE_NOGROUP = process.env.PROLIFIC_CODE_NOGROUP;
 const gameConfig = JSON.parse(fs.readFileSync(process.env.EXPERIMENT_DIR + '/.empirica/gameConfig.json', { encoding: 'utf8' }));
 const bonusConfig = gameConfig.find(config => config.type === 'bonus');
 const taskConfig = gameConfig.find(config => config.type === 'task');
-const AIPromptActive = fs.readFileSync(process.env.EXPERIMENT_DIR + '/.empirica/txt/promptActive.txt', { encoding: 'utf8' });
+// const AIPromptActive = fs.readFileSync(process.env.EXPERIMENT_DIR + '/.empirica/txt/promptActive.txt', { encoding: 'utf8' });
+const AIPromptActive = fs.readFileSync(process.env.EXPERIMENT_DIR + '/.empirica/txt/prompt.txt', { encoding: 'utf8' });
 
 const timeLimits = {
   confirmation: (DEPLOYMENT === "prod") ? taskConfig.confirmationDuration : taskConfig.confirmationDurationDev,
@@ -125,7 +126,17 @@ Empirica.onStageEnded(({ stage }) => {
   }
 });
 
-Empirica.onRoundEnded(({ round }) => { });
+Empirica.onRoundEnded(({ round }) => {
+  const players = round.currentGame.players;
+
+  for (const player of players) {
+    const playerChoice = player.round.get("decision");
+    const playerRatioanl = player.round.get("rational");
+    const choiceEqualRational = (playerChoice === playerRatioanl) ? true : false;
+    // console.log("choiceEqualRational", choiceEqualRational);
+    player.set("choiceEqualRational", choiceEqualRational);
+  }
+});
 
 Empirica.onGameEnded(({ game }) => {
   const treatment = game.get("treatment");

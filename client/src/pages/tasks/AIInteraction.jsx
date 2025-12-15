@@ -130,7 +130,7 @@ export function AIInteraction() {
     // 会話の8ターン目が終わったら、完了メッセージを表示
     useEffect(() => {
         if (conversationOver) return;
-        console.log("completedTurns", completedTurns);
+        // console.log("completedTurns", completedTurns);
         if (completedTurns === 8) {
             setConversationOver(true);
             // setConversationStep('finished');
@@ -188,10 +188,10 @@ export function AIInteraction() {
                             <div className="text-xl">{introStep}</div>
                             <div className="bg-white mt-4">
                                 <div className="text-sm font-light">
-                                    Now, Let's start with the conversation with <span className="font-semibold text-blue-500">the AI</span>!
+                                    Now, Let's start the conversation with <span className="font-semibold text-blue-500">the AI</span>!
                                 </div>
                                 <div className="mt-2 text-sm font-light">
-                                    <span className="font-semibold text-blue-500">The AI</span> will provide a suggestion with your partner based on its prediction about your future choice.
+                                    <span className="font-semibold text-blue-500">The AI</span> will determine the contents of Box B based on its prediction about your future choice.
                                 </div>
                             </div>
                         </div>
@@ -243,11 +243,11 @@ export function AIInteraction() {
                             />
                         ) : (
                             messageStream.map((message, index) => (
-                                <Message from={message.role} key={index}>
+                                <Message from={message.role} key={index} className="w-[90%] mx-auto">
                                     <MessageContent>
                                         <Response>{message.content}</Response>
                                     </MessageContent>
-                                    <MessageAvatar src={`/fig/icon/assistant/${message.role}-icon.svg`} />
+                                    {/* <MessageAvatar src={`/fig/icon/assistant/${message.role}-icon.svg`} /> */}
                                 </Message>
                             ))
                         )}

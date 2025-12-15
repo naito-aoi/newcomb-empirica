@@ -53,7 +53,7 @@ export function AIPrediction() {
         if (pdStep === "message") {
             const timer = setTimeout(() => {
                 setShowSecondMessage(true);
-            }, 2000);
+            }, 3500);
             return () => clearTimeout(timer);
         } else {
             setShowSecondMessage(false);
@@ -78,7 +78,7 @@ export function AIPrediction() {
                         className="relative h-10 w-50 bg-green-500 hover:bg-green-700 transition duration-150 shadow-lg text-lg rounded-lg"
                         onClick={() => {
                             player.round.set("pdStep", "message");
-                            StreamingChat(player, stage, 'system', 'Please repeat the following message: "I have finished predicting your choice and fixed the contents in Box B!"', setStreamingAssistantContent)
+                            StreamingChat(player, stage, 'system', 'Please repeat the following message: "AI has finished predicting your choice and fixed the contents in Box B!"', setStreamingAssistantContent)
                         }}
                     >
                         Start AI prediction
@@ -100,7 +100,7 @@ export function AIPrediction() {
                                 <MessageContent>
                                     <Response components={customComponents}>{message.content}</Response>
                                 </MessageContent>
-                                <MessageAvatar src={(message.role === "assistant") ? `/fig/icon/assistant/${message.role}-icon.svg` : `/fig/icon/user/${playerAvatar}.svg`} />
+                                {/* <MessageAvatar src={(message.role === "assistant") ? `/fig/icon/assistant/${message.role}-icon.svg` : `/fig/icon/user/${playerAvatar}.svg`} /> */}
                             </Message>
                         ))
                     )}

@@ -510,7 +510,7 @@ export function Tutorial({ next }) {
                                             <b>Box A</b> (left): <b>$${newcombBoxAValue}</b> is guaranteed.
                                         </li>
                                         <li>
-                                            <b>Box B</b> (right): The contents are either <b>$0 or $${newcombBoxBValue}</b>, determined by <span id='ai-avatar'>a random generator</span>.
+                                            <b>Box B</b> (right): The contents are either <b>$0 or $${newcombBoxBValue}</b>, determined by <span id='ai-avatar'>${(treatment.isAI) ? "an AI" : "a random generator"}</span>.
                                         </li>
                                     </ol>
                                     You will receive the contents of the box(es) you open as a bonus.
@@ -532,7 +532,7 @@ export function Tutorial({ next }) {
                                 "name": "question1",
                                 "title": "If you open both Box A and Box B, how much could you get in total?",
                                 "isRequired": true,
-                                // "choicesOrder": "random",
+                                "choicesOrder": "random",
                                 "choices": [
                                     {
                                         "value": 4,
@@ -603,7 +603,7 @@ export function Tutorial({ next }) {
                                 "name": "question2",
                                 "title": "What are the task's options?",
                                 "isRequired": true,
-                                // "choicesOrder": "random",
+                                "choicesOrder": "random",
                                 "choices": [
                                     {
                                         "value": 3,
@@ -640,12 +640,13 @@ export function Tutorial({ next }) {
                                         ${(treatment.isAI) ? "AI" : "Random Generator"} Decides the Contents of Box B
                                     </h5>
                                     <p>
-                                        ${(treatment.isAI) ? "<b><span id='ai-avatar'>The AI</span> is specifically designed for this task to predict</b> whether people will choose <span id='two-boxer'>two boxes</span> or <span id='one-boxer'>one box</span>, which then sets the content of Box B.</span>" : "Before you make a decision, <span id='ai-avatar'>a random generator</span> sets the contents of Box B. One of two labels below will be <b>randomly drawn</b> with equal probabilities:"}
+                                        Before you make a decision, <span id='ai-avatar'>${(treatment.isAI) ? "an AI" : "a random generator"}</span> sets the contents of Box B ${(treatment.isAI) ? "based on its prediction" : ""}. 
+                                        ${(treatment.isAI) ? `<span id='ai-avatar'>The AI</span> is specifically designed for this task to predict</b> whether people will choose <span id='two-boxer'>two boxes</span> or <span id='one-boxer'>one box</span>:` : `One of two labels below will be <b>randomly drawn</b> with equal probabilities:`}
                                     </p>
                                 `
                             }, {
                                 "type": "image",
-                                "imageLink": `/fig/Newcomb/newcomb-labels.png`,
+                                "imageLink": `/fig/Newcomb/newcomb-${(treatment.isAI) ? "predictions" : "labels"}.png`,
                                 "imageHeight": 200,
                                 "imageWidth": 800
                             }, {
@@ -700,7 +701,7 @@ export function Tutorial({ next }) {
                                 "name": "question3",
                                 "title": `How is the contents of Box B determined?`,
                                 "isRequired": true,
-                                // "choicesOrder": "random",
+                                "choicesOrder": "random",
                                 "choices": [
                                     {
                                         "value": 1,
@@ -734,10 +735,10 @@ export function Tutorial({ next }) {
                                 "name": "inst5Text",
                                 "html": `
                                     <h5>
-                                        After ${(treatment.isAI) ? "AI's Prediction" : "Random Draw"}, You Make Your Choice
+                                        After Box B Is Set, You Decide
                                     </h5>
                                     <p>
-                                        After <span id="ai-avatar">${(treatment.isAI) ? "the AI has predicted</span> your choice and" : "the random generator</span> has"} determined the contents of Box B, you will decide either:
+                                        After <span id="ai-avatar">${(treatment.isAI) ? "the AI</span> has predicted your choice and" : "the random generator</span> has"} determined the contents of Box B, you will decide either:
                                     </p>
                                     <ol>
                                         <li><span id="two-boxer">Box A and Box B </span> — a guaranteed $${newcombBoxAValue} from <b>Box A</b> + a chance of $0 or $${newcombBoxBValue} from <b>Box B</b></li>
@@ -749,7 +750,7 @@ export function Tutorial({ next }) {
                                         <li><span id="one-boxer">Box B only</span> — a chance of $0 or $${newcombBoxBValue} from <b>Box B</b></li>
                                     </ol>
                                     <p>
-                                        Please keep in mind that the contents of Box B have already been fixed before you make your choice.    
+                                        Please keep in mind that the contents of Box B have already been fixed before you make a decision.    
                                         You will be informed of ${(treatment.isAI) ? "the AI's prediction" : "the random generator's outcome"} at the end of the task.
                                     </p>
                                 `
@@ -785,7 +786,7 @@ export function Tutorial({ next }) {
                                         "text": `When ${(treatment.isAI) ? "a random generator draws the \"One Box\" label" : "an AI predicts you choose Box B only"}`
                                     }, {
                                         "value": 0,
-                                        "text": `When the random generator draws the "One Box" label` + `${(runMode === "dev" ? " [correct]" : "")}`
+                                        "text": `When ${(treatment.isAI) ? "the AI predicts you choose Box B only" : "When the random generator draws the \"One Box\" label"}` + `${(runMode === "dev" ? " [correct]" : "")}`
                                     }, {
                                         "value": 3,
                                         "text": `When ${(treatment.isAI) ? "the AI predicts you choose both Box A and Box B" : "the random generator draws the \"Two Boxes\" label"}`
@@ -881,12 +882,12 @@ export function Tutorial({ next }) {
                                         Interaction with AI
                                     </h5>
                                     <p>
-                                        Once you finish reading this tutorial, <b>you will interact with <span id="ai-avatar">the AI</span></b> before moving to the point management task and receive suggestions.
+                                        Once you finish reading this tutorial, <b>you will interact with <span id="ai-avatar">the AI</span></b> before moving to the task.
                                         This <span id="ai-avatar">AI system</span> works by analyzing patterns in human data.
                                         AI models often make predictions about user intentions or likely next actions as part of how they generate responses.
                                     </p>
                                     <p>
-                                        <span id="ai-avatar">The AI</span> will ask you some questions about your thoughts about the task and provide feedback based on your responses. Let's enjoy the conversation with <span id="ai-avatar">the AI</span>!
+                                        <span id="ai-avatar">The AI</span> will ask you some questions about yourself and provide feedback based on your responses. Let's enjoy the conversation with <span id="ai-avatar">the AI</span>!
                                     </p>
                                 `,
                                 "visibleIf": "{treatment.allocatorType} = 'generativeAI'"

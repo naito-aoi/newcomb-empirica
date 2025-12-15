@@ -29,8 +29,8 @@ export function HeaderUI() {
                             The contents of <b>Box B</b> are either <b>$0</b> or <b>${newcombBoxBValue}</b>.
                         </li>
                         <li>
-                            If {(treatment.isAI) ? <> <span id="ai-avatar">the AI</span> predicts that you will <span id="two-boxer">open both boxes</span></> : <><span id="ai-avatar">the random generator</span> draws "<span id="two-boxer">Two Boxes</span>" label</>}, the contents of Box B is already set to <b>$0</b>.
-                            If {(treatment.isAI) ? <><span id="ai-avatar">the AI</span> predicts that you will <span id="one-boxer">open only Box B</span></> : <><span id="ai-avatar">the random generator</span> draws "<span id="one-boxer">One Box</span>" label</>}, the contents of Box B is already set to <b>${newcombBoxBValue}</b>.
+                            If {(treatment.isAI) ? <> <span id="ai-avatar">the AI</span> predicts that you will <span id="two-boxer">open both boxes</span></> : <><span id="ai-avatar">the random generator</span> draws "<span id="two-boxer">Two Boxes</span>" label</>}, the contents of Box B is set to <b>$0</b>.
+                            If {(treatment.isAI) ? <><span id="ai-avatar">the AI</span> predicts that you will <span id="one-boxer">open only Box B</span></> : <><span id="ai-avatar">the random generator</span> draws "<span id="one-boxer">One Box</span>" label</>}, the contents of Box B is set to <b>${newcombBoxBValue}</b>.
                         </li>
                     </ol>
                 </div>

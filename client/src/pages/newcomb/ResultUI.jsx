@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import {
+    useGame,
     usePlayer,
     useStage
 } from "@empirica/core/player/classic/react";
@@ -9,10 +10,13 @@ import { Unplug } from '@/components/animate-ui/icons/unplug';
 import { AnimateIcon } from '@/components/animate-ui/icons/icon';
 
 export function ResultUI() {
+    const game = useGame();
+    const treatment = game.get("treatment");
     const player = usePlayer();
     const playerAvatar = player.get("avatar");
     const playerDecision = player.round.get("decision");
-    const drawnLabel = player.round.get("drawnLabel");
+    const drawnLabel = (treatment.isAI) ? "1box" : player.round.get("drawnLabel")
+    // console.log(drawnLabel);
 
     const stage = useStage();
     const stageName = stage.get("name");

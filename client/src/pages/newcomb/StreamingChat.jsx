@@ -27,7 +27,7 @@ export async function StreamingChat(player, stage, role, currentInput, setStream
 
     if (chatStorage === "chatHistory-suggestion") {
         // この場で5秒待機する
-        await new Promise(resolve => setTimeout(resolve, 5000));
+        await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
     try {
@@ -59,12 +59,12 @@ export async function StreamingChat(player, stage, role, currentInput, setStream
 
         // ストリーミング終了後に一度だけ履歴を追加
         // if (progress < maxProgress) {
-            const currentHistory = Array.isArray(currentPlayer.get(chatStorage)) ? currentPlayer.get(chatStorage) : [];
-            currentPlayer.set(chatStorage, [
-                ...currentHistory,
-                { role: "assistant", content: assistantContent }
-            ]);
-            setStreamingAssistantContent("");
+        const currentHistory = Array.isArray(currentPlayer.get(chatStorage)) ? currentPlayer.get(chatStorage) : [];
+        currentPlayer.set(chatStorage, [
+            ...currentHistory,
+            { role: "assistant", content: assistantContent }
+        ]);
+        setStreamingAssistantContent("");
         // }
     } catch (error) {
         console.error("Error:", error);

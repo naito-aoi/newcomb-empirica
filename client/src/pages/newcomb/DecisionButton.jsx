@@ -49,7 +49,7 @@ export function DecisionButton() {
                             <RadioGroupItem id={options[0].value} value={options[0].value} className="mt-2" />
                             <div className="flex flex-col items-start justify-start ml-5">
                                 <div className="text-lg font-semibold text-[#31cc31]">{options[0].label}</div>
-                                <div className="text-xs text-neutral-500">fixed ${newcombBoxAValue} + {(treatment.isAI) ? `${newcombBoxBValue} set by AI` : `a chance of $0 / $${newcombBoxBValue}`}</div>
+                                <div className="text-xs text-neutral-500">fixed ${newcombBoxAValue} + {(treatment.isAI) ? `$0 / $${newcombBoxBValue} set by AI` : `a chance of $0 / $${newcombBoxBValue}`}</div>
                             </div>
                         </div>
                         <img src={`${options[0].imgSrc}`} className="mx-auto h-28 mr-2" />
@@ -62,7 +62,7 @@ export function DecisionButton() {
                             <RadioGroupItem id={options[1].value} value={options[1].value} className="mt-2" />
                             <div className="flex flex-col items-start justify-start ml-5">
                                 <div className="text-lg font-semibold text-[#9e3dff]">{options[1].label}</div>
-                                <div className="text-xs text-neutral-500">{(treatment.isAI) ? `${newcombBoxBValue} set by AI` : `a chance of $0 / $${newcombBoxBValue}`}</div>
+                                <div className="text-xs text-neutral-500">{(treatment.isAI) ? `$0 / $${newcombBoxBValue} set by AI` : `a chance of $0 / $${newcombBoxBValue}`}</div>
                             </div>
                         </div>
                         <img src={`${options[1].imgSrc}`} className="mx-auto h-28 mr-2" />

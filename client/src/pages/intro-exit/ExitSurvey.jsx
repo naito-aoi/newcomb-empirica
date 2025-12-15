@@ -23,6 +23,9 @@ export function ExitSurvey({ next }) {
   const PROLIFIC_CODE = player.get('PROLIFIC_CODE');
   const PROLIFIC_CODE_COMPREHENSION = player.get('PROLIFIC_CODE_COMPREHENSION');
 
+  const choiceEqualRational = player.get("choiceEqualRational");
+  console.log("choiceEqualRational", choiceEqualRational);
+
   let surveyJson;
 
   function saveSurveyData(survey) {
@@ -164,10 +167,18 @@ export function ExitSurvey({ next }) {
                 "rows": 6
               }, {
                 "type": "comment",
+                "name": "choiceIsNotRational",
+                'textUpdateMode': 'onTyping',
+                "title": `Your actual choices and the choices you consider rational do not seem to match. Please tell us why.`,
+                "isRequired": true,
+                "rows": 6,
+                "visibleIf": "!{choiceEqualRational}"
+              }, {
+                "type": "comment",
                 "name": "Confusion",
                 'textUpdateMode': 'onTyping',
-                "title": "Was there any part of these tasks that was confusing or unclear? We'd appreciate any feedback.",
-                "isRequired": true,
+                "title": "Was there any part of these tasks that was confusing or unclear? We'd appreciate any feedback. (Optional)",
+                // "isRequired": true,
                 "rows": 6
               }
             ],
@@ -181,6 +192,7 @@ export function ExitSurvey({ next }) {
   survey.applyTheme(themeJson);
   survey.showCompleteButton = true;
   survey.setVariable("treatment", treatment);
+  survey.setVariable("choiceEqualRational", choiceEqualRational);
 
   // Restore the survey state
   const storageItemKey = `survey_state_${player.id}_Exit`;
