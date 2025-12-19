@@ -34,6 +34,7 @@ export function WheelPrediction() {
     const playerAvatar = player.get("avatar");
     const pdStep = player.round.get("pdStep") || "instruction"; // "instruction"; "message"; "decision"; "finished"
     const loadDuration = treatment.isAI ? 5000 : 3000;
+    const loadDurationSecond = treatment.isAI ? 3000 : 1500;
 
     if (stage.get("name") !== "choice") {
         return null;
@@ -55,7 +56,7 @@ export function WheelPrediction() {
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowSecondMessage(true);
-        }, 2500);
+        }, loadDurationSecond);
         return () => clearTimeout(timer);
     }, [predictionStarted]);
 

@@ -786,7 +786,7 @@ export function Tutorial({ next }) {
                                         "text": `When ${(treatment.isAI) ? "a random generator draws the \"One Box\" label" : "an AI predicts you choose Box B only"}`
                                     }, {
                                         "value": 0,
-                                        "text": `When ${(treatment.isAI) ? "the AI predicts you choose Box B only" : "When the random generator draws the \"One Box\" label"}` + `${(runMode === "dev" ? " [correct]" : "")}`
+                                        "text": `When ${(treatment.isAI) ? "the AI predicts you choose Box B only" : "the random generator draws the \"One Box\" label"}` + `${(runMode === "dev" ? " [correct]" : "")}`
                                     }, {
                                         "value": 3,
                                         "text": `When ${(treatment.isAI) ? "the AI predicts you choose both Box A and Box B" : "the random generator draws the \"Two Boxes\" label"}`
