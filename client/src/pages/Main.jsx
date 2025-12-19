@@ -47,13 +47,13 @@ export function Main() {
         <div className="flex items-start max-h-250 justify-center h-full w-full p-8">
             <div className="flex flex-col w-2xl min-w-2xl h-full overflow-hidden shadow-xl bg-white">
                 <div className="relative h-60 w-full p-4 border-b font-bold flex">
-                    {(treatment.isInteractive) &&
+                    {(treatment.isInteractive && treatment.isAI) &&
                         <div className="absolute w-300px">
                             <FloatingRobotAvatar />
                         </div>
                     }
                     <div
-                        className={`relative flex flex-col justify-between ${treatment.isInteractive ? "w-[calc(100%-300px)] ml-auto" : "w-[calc(100%-60px)] ml-8"}`}
+                        className={`relative flex flex-col justify-between ${(treatment.isInteractive && treatment.isAI) ? "w-[calc(100%-300px)] ml-auto" : "w-[calc(100%-60px)] ml-8"}`}
                     >
                         <div className="h-50">
                             <HeaderUI />

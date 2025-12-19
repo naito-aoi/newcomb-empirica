@@ -102,6 +102,21 @@ export function ExitSurvey({ next }) {
             }
           ]
         }, {
+          "name": "page2",
+          "elements": SoepSurvey,
+        }, {
+          "name": "page3",
+          "elements": RiskSurvey,
+        }, {
+          "name": "page4",
+          "elements": IdeologySurvey,
+        }, {
+          "name": "page5",
+          "elements": AiLiteracySurvey,
+        }, {
+          "name": "page6",
+          "elements": DeterminismSurvey,
+        }, {
           "name": "page7",
           "elements": {
             "type": "panel",
@@ -110,8 +125,7 @@ export function ExitSurvey({ next }) {
               {
                 "type": "html",
                 "name": "exitSurveyInfo",
-                "html": `<h5>Exit Survey</h5>
-          <p>Please answer the following short survey before completing the study.</p>`
+                "html": `<h5>Exit Survey</h5>`
               }, {
                 "type": "radiogroup",
                 "name": "gender",
@@ -151,13 +165,13 @@ export function ExitSurvey({ next }) {
                   "Over $100,000",
                   "Don't want to answer"
                 ],
-              }, {
-                "type": "comment",
-                "name": "DecisionProcess",
-                'textUpdateMode': 'onTyping',
-                "title": "Please tell us what you focused on and your decision-making process in this task.",
-                "isRequired": true,
-                "rows": 6
+                // }, {
+                //   "type": "comment",
+                //   "name": "DecisionProcess",
+                //   'textUpdateMode': 'onTyping',
+                //   "title": "Please tell us what you focused on and your decision-making process in this task.",
+                //   "isRequired": true,
+                //   "rows": 6
               }, {
                 "type": "comment",
                 "name": "PredictionSystem",

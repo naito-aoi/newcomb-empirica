@@ -53,7 +53,7 @@ export function AIPrediction() {
         if (pdStep === "message") {
             const timer = setTimeout(() => {
                 setShowSecondMessage(true);
-            }, 3500);
+            }, 3000);
             return () => clearTimeout(timer);
         } else {
             setShowSecondMessage(false);

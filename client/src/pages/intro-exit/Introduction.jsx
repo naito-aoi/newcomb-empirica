@@ -11,6 +11,7 @@ import React, { useState, useEffect } from "react";
 import { Tutorial } from "./Tutorial.jsx";
 import { Overview } from "../overview/Overview";
 import { AIInteraction } from "../tasks/AIInteraction.jsx";
+import { RandomGeneratorTrial } from "../tasks/RandomGeneratorTrial.jsx";
 import { NonAIInteraction } from "../tasks/NonAIInteraction.jsx";
 import { ExpectationSurvey } from "./ExpectationSurvey.jsx";
 
@@ -43,7 +44,7 @@ export function Introduction({ next }) {
       // case 2:
       content = (
         <div className="flex items-start max-h-250 justify-center h-full w-full p-8">
-          {(treatment.allocatorType === 'generativeAI') ? <AIInteraction /> : <NonAIInteraction />}
+          {(treatment.allocatorType === 'generativeAI') ? <AIInteraction /> : <RandomGeneratorTrial />}
         </div>
       );
       break;

@@ -33,6 +33,7 @@ export function WheelPrediction() {
     const stage = useStage();
     const playerAvatar = player.get("avatar");
     const pdStep = player.round.get("pdStep") || "instruction"; // "instruction"; "message"; "decision"; "finished"
+    const loadDuration = treatment.isAI ? 5000 : 3000;
 
     if (stage.get("name") !== "choice") {
         return null;
@@ -50,16 +51,13 @@ export function WheelPrediction() {
     ];
 
     // 2秒後に2番目のメッセージを表示
+    const [predictionStarted, setPredictionStarted] = useState(false);
     useEffect(() => {
-        if (messageStream.length === 1) {
-            const timer = setTimeout(() => {
-                setShowSecondMessage(true);
-            }, 5000);
-            return () => clearTimeout(timer);
-        } else {
-            setShowSecondMessage(false);
-        }
-    }, [messageStream.length]);
+        const timer = setTimeout(() => {
+            setShowSecondMessage(true);
+        }, 2500);
+        return () => clearTimeout(timer);
+    }, [predictionStarted]);
 
     useEffect(() => {
         if (messageStream.length === 1) {
@@ -83,9 +81,10 @@ export function WheelPrediction() {
                             // console.log("drawnLabel-before", player.round.get("drawnLabel"));
                             // draw
                             player.set('drawLabel', true);
+                            setPredictionStarted(true);
 
                             // 5秒待機
-                            await new Promise((resolve) => setTimeout(resolve, 5000));
+                            await new Promise((resolve) => setTimeout(resolve, loadDuration));
                             // console.log("drawnLabel-after", player.round.get("drawnLabel"));
 
                             const currentHistory = Array.isArray(player.round.get("chatHistory-suggestion")) ? player.round.get("chatHistory-suggestion") : [];
@@ -124,6 +123,12 @@ export function WheelPrediction() {
                                 {showSecondMessage ? <CircleCheckBigIcon className="w-4 h-4 text-neutral-400" /> : <Loader size={16} className="text-neutral-400" />}
                                 <span className={`text-sm text-neutral-400 font-light ${showSecondMessage ? "animate-pulse" : ""}`}>{(treatment.isAI) ? "AI is predicting your choice..." : "The random generator is drawing a label..."}</span>
                             </div>
+                            {showSecondMessage && (
+                                <div className="flex mx-1 gap-2 mt-2">
+                                    <Loader size={16} />
+                                    <span className="text-sm text-neutral-400 font-light animate-pulse">Setting the contents of Box B...</span>
+                                </div>
+                            )}
                         </>
                     )}
                 </ConversationContent>

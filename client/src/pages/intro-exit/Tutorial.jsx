@@ -1073,7 +1073,7 @@ export function Tutorial({ next }) {
             // player.set("introDone", true);
             if (treatment.isInteractive) {
                 player.set("introStepIndex", 1);
-                player.set("introStep", (treatment.allocatorType === "generativeAI") ? "Conversation with AI" : "Pre-task survey");
+                player.set("introStep", (treatment.allocatorType === "generativeAI") ? "Conversation with AI" : "Random Generator Check");
             } else {
                 player.set("introStepIndex", 1);
                 player.set("introStep", "Decision making task");

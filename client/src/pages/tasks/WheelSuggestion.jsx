@@ -10,8 +10,8 @@ import {
     ConversationEmptyState,
     ConversationScrollButton,
 } from '@/components/ai-elements/conversation';
-import { 
-    Message, 
+import {
+    Message,
     MessageContent,
     MessageAvatar,
 } from '@/components/ai-elements/message';
@@ -26,7 +26,7 @@ import { DecisionButton } from "./DecisionButton.jsx";
 
 import { TextComponents } from './ColoredText.tsx';
 const customComponents = {
-  ...TextComponents,
+    ...TextComponents,
 };
 
 export function WheelSuggestion() {
@@ -77,7 +77,7 @@ export function WheelSuggestion() {
                     <div className="absolute inset-0 flex items-center justify-center">
                         <div className="h-8 w-30 rounded-md bg-green-500 animate-ping"></div>
                     </div>
-                    <Button 
+                    <Button
                         size="icon"
                         className="relative h-10 w-50 bg-green-500 hover:bg-green-700 transition duration-150 shadow-lg text-lg rounded-lg"
                         onClick={async () => {
@@ -85,7 +85,7 @@ export function WheelSuggestion() {
                             player.round.set("pdStep", "message");
 
                             // 5秒待機
-                            await new Promise((resolve) => setTimeout(resolve, 5000));
+                            await new Promise((resolve) => setTimeout(resolve, 2000));
 
                             const currentHistory = Array.isArray(player.round.get("chatHistory-suggestion")) ? player.round.get("chatHistory-suggestion") : [];
                             player.round.set("chatHistory-suggestion", [
@@ -98,7 +98,7 @@ export function WheelSuggestion() {
                     </Button>
                 </div>
             ) : (
-            <></>
+                <></>
             )}
             <Conversation id="ai-conversation" className="w-full h-50 mb-auto" style={{ height: '500px' }}>
                 <ConversationContent>
@@ -107,13 +107,13 @@ export function WheelSuggestion() {
                             title="No suggestion yet for this round."
                             description={`Please click "Spin the wheel" button above.`}
                         />
-                        ) : (
+                    ) : (
                         messageStream.map((message, index) => (
                             <Message from={message.role} key={index}>
                                 <MessageContent>
                                     <Response components={customComponents}>{message.content}</Response>
                                 </MessageContent>
-                                <MessageAvatar src={(message.role==="assistant") ? `/fig/icon/assistant/wheel-icon.svg` : `/fig/icon/user/${playerAvatar}.svg`} />
+                                <MessageAvatar src={(message.role === "assistant") ? `/fig/icon/assistant/wheel-icon.svg` : `/fig/icon/user/${playerAvatar}.svg`} />
                             </Message>
                         ))
                     )}

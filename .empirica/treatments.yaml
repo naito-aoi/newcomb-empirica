@@ -49,6 +49,14 @@ treatments:
       isInteractive: false
       nRound: 1
     name: exp2-random
+  - desc: "exp2-interactiveRandom"
+    factors:
+      playerCount: 1
+      allocatorType: random
+      isAI: false
+      isInteractive: true
+      nRound: 1
+    name: exp2-interactiveRandom
   - desc: "exp2-silentAI"
     factors:
       playerCount: 1
