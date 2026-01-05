@@ -93,10 +93,12 @@ export function RandomGeneratorTrial() {
               <div className="text-xl">{introStep}</div>
               <div className="bg-white mt-4">
                 <div className="text-sm font-light">
-                  Before starting the main task, let's try the random generator. You can see how the random generator works up to 10 times.
+                  Before starting the main task, let's try the random generator.
+                  You can test it up to <b>10 times</b>.
+                  Please note that the results from this trial will not affect the outcome of the main task.
                 </div>
                 <div className="text-sm font-light mt-2">
-                  Please click the "<b>draw a label</b>" button.
+                  Please click the "<b>Draw a label</b>" button.
                 </div>
               </div>
             </div>
@@ -107,16 +109,16 @@ export function RandomGeneratorTrial() {
         <div id="ai-conversation" className="flex flex-col h-full overflow-y-auto py-4 px-12 gap-4 bg-sky-50">
 
           {/* グリッドのヘッダー */}
-          <div className="grid grid-cols-3 gap-4 text-sm font-bold text-neutral-500 border-b pb-2 mb-2 text-center">
+          <div className="grid grid-cols-2 gap-4 text-sm font-bold text-neutral-500 border-b pb-2 mb-2 text-center">
             <div>Draw</div>
             <div>Label</div>
-            <div>Contents of Box B</div>
+            {/* <div>Contents of Box B</div> */}
           </div>
 
           <div className="overflow-auto gap-4 flex flex-col">
             {/* 履歴の表示（完了した試行） */}
             {history.map((record, index) => (
-              <div key={index} className="grid grid-cols-3 gap-4 items-center h-20 bg-white p-2 rounded shadow-sm">
+              <div key={index} className="grid grid-cols-2 gap-4 items-center h-20 bg-white p-2 rounded shadow-sm">
                 {/* 列1: 無効化されたボタン */}
                 <div className="flex justify-center">
                   <Button disabled variant="secondary" className="w-[120px] opacity-50">
@@ -125,26 +127,26 @@ export function RandomGeneratorTrial() {
                 </div>
 
                 {/* 列2: 結果ラベル */}
-                <div className="flex justify-center items-center text-lg font-semibold">
+                <div className="flex justify-center items-center text-lg font-semibold h-16">
                   <span id={(record.label === "One Box") ? "one-boxer" : (record.label === "Two Boxes") ? "two-boxer" : ""}>{record.label}</span>
                 </div>
 
                 {/* 列3: 箱の中身（画像） */}
-                <div className="flex justify-center items-center">
+                {/* <div className="flex justify-center items-center">
                   <img src={record.image} alt="Result" className="h-16 w-16 object-contain" />
-                </div>
+                </div> */}
               </div>
             ))}
 
             {/* 現在のアクティブな試行（まだ10回未満の場合のみ表示） */}
             {history.length < MAX_TRIALS && (
-              <div className="grid grid-cols-3 gap-4 items-center h-30 bg-white p-2 rounded shadow border-2 border-blue-200 animate-in fade-in slide-in-from-bottom-2">
+              <div className="grid grid-cols-2 gap-4 items-center h-30 bg-white p-2 rounded shadow border-2 border-blue-200 animate-in fade-in slide-in-from-bottom-2">
                 {/* 列1: アクティブなボタン */}
                 <div className="relative flex justify-center items-center h-16 w-full">
                   <div className="absolute inset-0 flex items-center justify-center z-0">
-                    <div className="h-8 w-20 rounded-md bg-sky-500/50 animate-ping"></div>
+                    <div className="h-8 w-20 rounded-md bg-green-500 animate-ping"></div>
                   </div>
-                  <Button onClick={handleDraw} className="relative w-[120px] bg-blue-600 hover:bg-blue-700 text-white z-10">
+                  <Button onClick={handleDraw} className="relative w-[120px] bg-green-500 hover:bg-green-700 text-white z-10">
                     Draw a label
                   </Button>
                 </div>
@@ -155,7 +157,7 @@ export function RandomGeneratorTrial() {
                 </div>
 
                 {/* 列3: 閉じた箱の画像 */}
-                <div className="flex justify-center items-center">
+                {/* <div className="flex justify-center items-center">
                   <div className="h-24 w-24 rounded flex items-center justify-center text-neutral-400 text-xs overflow-hidden relative">
                     <img
                       src={IMG_BOX_CLOSED}
@@ -163,7 +165,7 @@ export function RandomGeneratorTrial() {
                       className="h-full w-auto object-cover"
                     />
                   </div>
-                </div>
+                </div> */}
               </div>
             )}
             {/* スクロール用ダミー要素 */}

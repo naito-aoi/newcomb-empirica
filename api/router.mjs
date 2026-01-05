@@ -11,7 +11,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 if (!OPENAI_API_KEY) {
   // **APIキーがない場合はサーバーを起動せず、エラーを出して停止**
   console.error("FATAL: OPENAI_API_KEY is not set in the environment.");
-  process.exit(1); 
+  process.exit(1);
 }
 const client = new OpenAI({
   apiKey: OPENAI_API_KEY,
@@ -21,7 +21,7 @@ const client = new OpenAI({
 // 🌟 修正: 開発用のオリジンを許可するCORS設定
 const allowedOrigins = [
   "https://ai-pd.anaito.com",
-  "http://localhost:9474", 
+  "http://localhost:9474",
   "http://localhost:8844"
 ];
 app.use(cors({
@@ -47,7 +47,7 @@ app.post('/api/chat', async (req, res) => {
   if (!message || !Array.isArray(message) || message.length === 0) {
     return res.status(400).json({ error: 'Invalid message format' });
   }
-  
+
   try {
     res.writeHead(200, {
       'Content-Type': 'text/plain; charset=utf-8',
@@ -56,7 +56,7 @@ app.post('/api/chat', async (req, res) => {
     });
 
     const stream = await client.chat.completions.create({
-      model: 'gpt-4.1-mini-2025-04-14',
+      model: 'gpt-4.1-2025-04-14',
       messages: message,
       stream: true,
     });
@@ -67,11 +67,11 @@ app.post('/api/chat', async (req, res) => {
         res.write(content);
       }
     }
-    
+
     res.end();
   } catch (error) {
     console.error('Error communicating with OpenAI:', error);
-    
+
     // ヘッダーが既に送信されているかチェック
     if (!res.headersSent) {
       res.status(500).json({ error: 'Something went wrong' });
