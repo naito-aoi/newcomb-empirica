@@ -897,6 +897,35 @@ export function Tutorial({ next }) {
                     }
                 ]
             }, {
+                "name": "page7",
+                "elements": [
+                    {
+                        "type": "panel",
+                        "name": "panel7",
+                        "elements": [
+                            {
+                                "type": "html",
+                                "name": "inst7Text",
+                                "html": `
+                                    <h5>
+                                        Random Generator Check
+                                    </h5>
+                                    <p>
+                                        Once you finish reading this tutorial, you will try <span id="ai-avatar">the random generator</span> before moving to the task.
+                                        This <span id="ai-avatar">random generator</span> works by randomly drawing one of two labels with equal probabilities.
+                                    </p>
+                                    <p>
+                                        The outcome will be always independent and different each time you try it.
+                                        The outcome of this check will not affect the result of the main task.
+                                    </p>
+                                `,
+                                "visibleIf": "{treatment.isInteractive} = 'true' and {treatment.isAI} = 'false'"
+                            }
+                        ],
+                        "showQuestionNumbers": "off"
+                    }
+                ]
+            }, {
                 "name": "page8",
                 "elements": [
                     {

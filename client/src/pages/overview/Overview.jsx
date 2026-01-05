@@ -29,7 +29,7 @@ export function Overview() {
       description: '3 min',
     },
     {
-      label: `${(treatment.allocatorType === 'generativeAI') ? 'Conversation with AI' : 'Pre-task survey'}`,
+      label: `${(treatment.allocatorType === 'generativeAI') ? 'Conversation with AI' : 'Random Generator Check'}`,
       description: '2 min',
     },
     {

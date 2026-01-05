@@ -122,7 +122,7 @@ export function RandomGeneratorTrial() {
                 {/* 列1: 無効化されたボタン */}
                 <div className="flex justify-center">
                   <Button disabled variant="secondary" className="w-[120px] opacity-50">
-                    Opened #{record.step}
+                    Drawn #{record.step}
                   </Button>
                 </div>
 
