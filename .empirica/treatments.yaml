@@ -24,6 +24,7 @@ factors:
     values:
       - value: 1
       - value: 3
+      - value: 5
   - desc: AI's prediction
     name: aiPrediction
     values:
@@ -90,7 +91,7 @@ treatments:
       allocatorType: silentAI
       isAI: true
       isInteractive: false
-      nRound: 3
+      nRound: 5
       aiPrediction: 1box
     name: exp3-1box
   - desc: "exp3-2box"
@@ -99,6 +100,6 @@ treatments:
       allocatorType: silentAI
       isAI: true
       isInteractive: false
-      nRound: 3
+      nRound: 5
       aiPrediction: 2box
     name: exp3-2box

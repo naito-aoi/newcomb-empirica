@@ -22,7 +22,7 @@ export function HeaderUI() {
 
     const choiceUI = (
         <>
-            <div className="text-xl">Decision Making Task{(treatment.nRound === 3) ? `: Round ${round.get('round')}` : ""}</div>
+            <div className="text-xl">Decision Making Task{(treatment.nRound > 1) ? `: Round ${round.get('round')}` : ""}</div>
             <div className="mr-2">
                 <div id="custom" className="text-sm font-light">
                     <ol className="list-disc list-outside">
@@ -41,7 +41,7 @@ export function HeaderUI() {
     );
     const beliefUI = (
         <>
-            <div className="text-xl">Decision Making Task{(treatment.nRound === 3) ? `: Round ${round.get('round')}` : ""}</div>
+            <div className="text-xl">Decision Making Task{(treatment.nRound > 1) ? `: Round ${round.get('round')}` : ""}</div>
             <div className="mr-2 mt-4">
                 <div className="text-sm font-light">
                     Please answer the questions below.
@@ -51,7 +51,7 @@ export function HeaderUI() {
     );
     const resultUI = (
         <>
-            <div className="text-xl">Result{(treatment.nRound === 3) ? `: Round ${round.get('round')}` : ""}</div>
+            <div className="text-xl">Result{(treatment.nRound > 1) ? `: Round ${round.get('round')}` : ""}</div>
             <div className="mr-2 mt-4">
                 <div className="text-sm font-light">
                     {(treatment.isAI) ? <><span id="ai-avatar">The AI</span> predicted that you would choose to</> : <><span id="ai-avatar">The random generator</span> drew</>}
