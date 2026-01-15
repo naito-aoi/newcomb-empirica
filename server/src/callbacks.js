@@ -112,7 +112,7 @@ Empirica.onStageEnded(({ stage }) => {
 
   for (const player of players) {
     const playerChoice = player.round.get("decision");
-    const predictedChoice = (treatment.isAI) ? "1box" : player.round.get("drawnLabel");
+    const predictedChoice = (treatment.isAI) ? treatment.aiPrediction : player.round.get("drawnLabel");
     const contentsOfBoxB = (predictedChoice === "1box") ? bonusConfig.newcombBoxBValue : 0;
     const playerScore = (playerChoice === "1box") ? contentsOfBoxB : (playerChoice === "2box") ? bonusConfig.newcombBoxAValue + contentsOfBoxB : 0;
     // const playerScore = (playerChoice === "1box") ? bonusConfig.newcombBoxBValue : (playerChoice === "2box") ? bonusConfig.newcombBoxAValue + bonusConfig.newcombBoxBValue : 0;

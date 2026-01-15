@@ -20,11 +20,12 @@ export function ExitSurvey({ next }) {
   const treatment = game?.get("treatment");
   const player = usePlayer();
   const totalScore = player.get("playerScore") || 0;
+  const paidBonus = Math.ceil((player.get("playerScore") / treatment.nRound) * 10) / 10 || 0;
+  player.set("paidBonus", paidBonus);
   const PROLIFIC_CODE = player.get('PROLIFIC_CODE');
   const PROLIFIC_CODE_COMPREHENSION = player.get('PROLIFIC_CODE_COMPREHENSION');
 
   const choiceEqualRational = player.get("choiceEqualRational");
-  console.log("choiceEqualRational", choiceEqualRational);
 
   let surveyJson;
 
@@ -86,7 +87,7 @@ export function ExitSurvey({ next }) {
               You have completed the <b>Decision Making Task</b>!
             </p>
             <p id="result-text">
-              Your bonus for this study is <b>$${totalScore}</b>.
+              Your ${(treatment.nRound) > 1 ? "average bonus" : "bonus"} for this study is <b>$${paidBonus}</b>, which will be paid separately within a few days.
             </p>
             `
                 }, {
@@ -104,18 +105,23 @@ export function ExitSurvey({ next }) {
         }, {
           "name": "page2",
           "elements": SoepSurvey,
+          "visibleIf": "{treatment.nRound} = 1"
         }, {
           "name": "page3",
           "elements": RiskSurvey,
+          "visibleIf": "{treatment.nRound} = 1"
         }, {
           "name": "page4",
           "elements": IdeologySurvey,
+          "visibleIf": "{treatment.nRound} = 1"
         }, {
           "name": "page5",
           "elements": AiLiteracySurvey,
+          "visibleIf": "{treatment.nRound} = 1"
         }, {
           "name": "page6",
           "elements": DeterminismSurvey,
+          "visibleIf": "{treatment.nRound} = 1"
         }, {
           "name": "page7",
           "elements": {

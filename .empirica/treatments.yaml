@@ -24,6 +24,11 @@ factors:
     values:
       - value: 1
       - value: 3
+  - desc: AI's prediction
+    name: aiPrediction
+    values:
+      - value: 1box
+      - value: 2box
 treatments:
   - desc: "exp1-random"
     factors:
@@ -32,6 +37,7 @@ treatments:
       isAI: false
       isInteractive: false
       nRound: 1
+      aiPrediction: 1box
     name: exp1-random
   - desc: "exp1-silentAI"
     factors:
@@ -40,6 +46,7 @@ treatments:
       isAI: true
       isInteractive: false
       nRound: 1
+      aiPrediction: 1box
     name: exp1-silentAI
   - desc: "exp2-random"
     factors:
@@ -48,6 +55,7 @@ treatments:
       isAI: false
       isInteractive: false
       nRound: 1
+      aiPrediction: 1box
     name: exp2-random
   - desc: "exp2-interactiveRandom"
     factors:
@@ -56,6 +64,7 @@ treatments:
       isAI: false
       isInteractive: true
       nRound: 1
+      aiPrediction: 1box
     name: exp2-interactiveRandom
   - desc: "exp2-silentAI"
     factors:
@@ -64,6 +73,7 @@ treatments:
       isAI: true
       isInteractive: false
       nRound: 1
+      aiPrediction: 1box
     name: exp2-silentAI
   - desc: "exp2-generativeAI"
     factors:
@@ -72,4 +82,23 @@ treatments:
       isAI: true
       isInteractive: true
       nRound: 1
+      aiPrediction: 1box
     name: exp2-generativeAI
+  - desc: "exp3-1box"
+    factors:
+      playerCount: 1
+      allocatorType: silentAI
+      isAI: true
+      isInteractive: false
+      nRound: 3
+      aiPrediction: 1box
+    name: exp3-1box
+  - desc: "exp3-2box"
+    factors:
+      playerCount: 1
+      allocatorType: silentAI
+      isAI: true
+      isInteractive: false
+      nRound: 3
+      aiPrediction: 2box
+    name: exp3-2box

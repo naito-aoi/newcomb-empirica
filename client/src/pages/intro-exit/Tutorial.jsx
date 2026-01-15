@@ -926,6 +926,34 @@ export function Tutorial({ next }) {
                     }
                 ]
             }, {
+                "name": "page7",
+                "elements": [
+                    {
+                        "type": "panel",
+                        "name": "panel7",
+                        "elements": [
+                            {
+                                "type": "html",
+                                "name": "inst7Text",
+                                "html": `
+                                    <h5>
+                                        Iterative Rounds
+                                    </h5>
+                                    <p>
+                                        You will repeat the decision-making task for <b>multiple rounds</b>.
+                                        In each round, you can check the outcome based on your choice and <span id="ai-avatar">${(treatment.isAI) ? "the AI's prediction" : "the random generator's outcome"}</span>.
+                                    </p>
+                                    <p>
+                                        The final bonus will be calculated based on the <b>average</b> rewards you earn across all rounds.
+                                    </p>
+                                `,
+                                "visibleIf": "{treatment.nRound} > 1"
+                            }
+                        ],
+                        "showQuestionNumbers": "off"
+                    }
+                ]
+            }, {
                 "name": "page8",
                 "elements": [
                     {

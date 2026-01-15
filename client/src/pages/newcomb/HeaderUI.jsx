@@ -1,5 +1,6 @@
 import {
     useGame,
+    useRound,
     useStage,
     usePlayer
 } from "@empirica/core/player/classic/react";
@@ -7,6 +8,7 @@ import {
 export function HeaderUI() {
     const game = useGame();
     const treatment = game.get("treatment");
+    const round = useRound();
     const stage = useStage();
     const player = usePlayer();
     const stageName = stage.get("name");
@@ -14,13 +16,13 @@ export function HeaderUI() {
     const newcombBoxBValue = player.get("newcombBoxBValue");
 
     const playerChoice = player.round.get("decision");
-    const predictedChoice = (treatment.isAI) ? "1box" : player.round.get("drawnLabel");
+    const predictedChoice = (treatment.isAI) ? treatment.aiPrediction : player.round.get("drawnLabel");
     const contentsOfBoxB = (predictedChoice === "1box") ? newcombBoxBValue : 0;
 
 
     const choiceUI = (
         <>
-            <div className="text-xl">Decision Making Task</div>
+            <div className="text-xl">Decision Making Task{(treatment.nRound === 3) ? `: Round ${round.get('round')}` : ""}</div>
             <div className="mr-2">
                 <div id="custom" className="text-sm font-light">
                     <ol className="list-disc list-outside">
@@ -39,7 +41,7 @@ export function HeaderUI() {
     );
     const beliefUI = (
         <>
-            <div className="text-xl">Decision Making Task</div>
+            <div className="text-xl">Decision Making Task{(treatment.nRound === 3) ? `: Round ${round.get('round')}` : ""}</div>
             <div className="mr-2 mt-4">
                 <div className="text-sm font-light">
                     Please answer the questions below.
@@ -49,7 +51,7 @@ export function HeaderUI() {
     );
     const resultUI = (
         <>
-            <div className="text-xl">Result</div>
+            <div className="text-xl">Result{(treatment.nRound === 3) ? `: Round ${round.get('round')}` : ""}</div>
             <div className="mr-2 mt-4">
                 <div className="text-sm font-light">
                     {(treatment.isAI) ? <><span id="ai-avatar">The AI</span> predicted that you would choose to</> : <><span id="ai-avatar">The random generator</span> drew</>}
@@ -59,7 +61,7 @@ export function HeaderUI() {
                         {(predictedChoice === "1box") ? "One Box" : "Two Boxes"} &nbsp;
                     </span>
                     <span>
-                        and set Box B to contain <b>${contentsOfBoxB}</b>.
+                        and set Box B to contain <b>${contentsOfBoxB}</b> {(treatment.nRound > 1) ? "in this round" : ""} .
                     </span>
                 </div>
             </div>

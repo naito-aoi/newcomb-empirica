@@ -15,7 +15,7 @@ export function ResultUI() {
     const player = usePlayer();
     const playerAvatar = player.get("avatar");
     const playerDecision = player.round.get("decision");
-    const drawnLabel = (treatment.isAI) ? "1box" : player.round.get("drawnLabel")
+    const drawnLabel = (treatment.isAI) ? treatment.aiPrediction : player.round.get("drawnLabel")
     // console.log(drawnLabel);
 
     const stage = useStage();
