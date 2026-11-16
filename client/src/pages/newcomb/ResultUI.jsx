@@ -8,14 +8,16 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Unplug } from '@/components/animate-ui/icons/unplug';
 import { AnimateIcon } from '@/components/animate-ui/icons/icon';
+import { getPredictor } from "@/utils/predictor.js";
 
 export function ResultUI() {
     const game = useGame();
     const treatment = game.get("treatment");
+    const p = getPredictor(treatment);
     const player = usePlayer();
     const playerAvatar = player.get("avatar");
     const playerDecision = player.round.get("decision");
-    const drawnLabel = (treatment.isAI) ? treatment.aiPrediction : player.round.get("drawnLabel")
+    const drawnLabel = (p.usesFixedContents) ? treatment.aiPrediction : player.round.get("drawnLabel")
     // console.log(drawnLabel);
 
     const stage = useStage();
@@ -38,7 +40,7 @@ export function ResultUI() {
                     <div className="flex h-full items-start bg-white p-3 rounded-xl shadow border-1 border-neutral-200">
                         <div className="flex flex-col items-center">
                             <Avatar className="mx-2 border-1 border-neutral-200">
-                                <AvatarImage src={`fig/icon/user/you.svg`} />
+                                <AvatarImage src={`fig/icon/user/silhouette.svg`} />
                                 <AvatarFallback></AvatarFallback>
                             </Avatar>
                             <div className="text-normal font-semibold text-neutral-800">You</div>
@@ -51,6 +53,9 @@ export function ResultUI() {
                             <div className="text-neutral-600">
                                 <span className="font-light">Earning: </span><span className="font-semibold">${player.round.get("playerScore")}</span>
                             </div>
+                            {treatment.isHypothetical &&
+                                <div className="text-xs font-light text-neutral-500">Hypothetical: not actually paid</div>
+                            }
                         </div>
                     </div>
                 </div>

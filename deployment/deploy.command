@@ -13,7 +13,7 @@ echo $SERVER_PEM;
 
 if [ "$1" == "--full" ] 
 then
-	sftp -b - -i deployment/$SERVER_PEM $SERVER_SSH <<EOF
+	sftp -b - -i "$SERVER_PEM" $SERVER_SSH <<EOF
 		put -r "$parent_path/$EXPERIMENT_NAME.tar.zst" "$SERVER_PATH"
 		put "$parent_path/start.sh" "$SERVER_PATH/start.sh"
 		put "$parent_path/.env_prod" "$SERVER_PATH/.env"
@@ -21,7 +21,7 @@ then
 		exit
 EOF
 else
-	sftp -b - -i deployment/$SERVER_PEM $SERVER_SSH <<EOF
+	sftp -b - -i "$SERVER_PEM" $SERVER_SSH <<EOF
 		put -r "$parent_path/$EXPERIMENT_NAME.tar.zst" "$SERVER_PATH"
 		put "$parent_path/start.sh" "$SERVER_PATH/start.sh"
 		put "$parent_path/.env_prod" "$SERVER_PATH/.env"

@@ -9,6 +9,8 @@ factors:
       - value: random
       - value: silentAI
       - value: generativeAI
+      - value: silentHuman
+      - value: none
   - desc: Type of predictor used in the game.
     name: isAI
     values:
@@ -30,6 +32,32 @@ factors:
     values:
       - value: 1box
       - value: 2box
+  - desc: Who predicts the participant's choice (exp4). If unset, derived from isAI (AI / random generator).
+    name: predictorType
+    values:
+      - value: AI
+      - value: human
+      - value: none
+  - desc: What the tutorial says about the predictor's reliability (exp4). reliable = high reliability stated explicitly; agnostic = nothing said.
+    name: reliability
+    values:
+      - value: reliable
+      - value: agnostic
+  - desc: If true, the tutorial and task state that the money in the boxes is not actually paid (exp4).
+    name: isHypothetical
+    values:
+      - value: false
+      - value: true
+  - desc: If true, the result (feedback) stage is skipped and Box B's contents are never revealed (exp4).
+    name: skipResult
+    values:
+      - value: false
+      - value: true
+  - desc: If true, the trait surveys (SOEP, risk, ideology, determinism) are left out of the exit survey; the AI literacy scale is kept (exp4).
+    name: skipTraitSurveys
+    values:
+      - value: false
+      - value: true
 treatments:
   - desc: "exp1-random"
     factors:
@@ -103,3 +131,72 @@ treatments:
       nRound: 5
       aiPrediction: 2box
     name: exp3-2box
+  - desc: "exp4-reliableAI"
+    factors:
+      playerCount: 1
+      allocatorType: silentAI
+      isAI: true
+      isInteractive: false
+      nRound: 1
+      aiPrediction: 1box
+      predictorType: AI
+      reliability: reliable
+      isHypothetical: true
+      skipResult: true
+      skipTraitSurveys: true
+    name: exp4-reliableAI
+  - desc: "exp4-reliableHuman"
+    factors:
+      playerCount: 1
+      allocatorType: silentHuman
+      isAI: false
+      isInteractive: false
+      nRound: 1
+      aiPrediction: 1box
+      predictorType: human
+      reliability: reliable
+      isHypothetical: true
+      skipResult: true
+      skipTraitSurveys: true
+    name: exp4-reliableHuman
+  - desc: "exp4-agnosticAI"
+    factors:
+      playerCount: 1
+      allocatorType: silentAI
+      isAI: true
+      isInteractive: false
+      nRound: 1
+      aiPrediction: 1box
+      predictorType: AI
+      reliability: agnostic
+      isHypothetical: true
+      skipResult: true
+      skipTraitSurveys: true
+    name: exp4-agnosticAI
+  - desc: "exp4-agnosticHuman"
+    factors:
+      playerCount: 1
+      allocatorType: silentHuman
+      isAI: false
+      isInteractive: false
+      nRound: 1
+      aiPrediction: 1box
+      predictorType: human
+      reliability: agnostic
+      isHypothetical: true
+      skipResult: true
+      skipTraitSurveys: true
+    name: exp4-agnosticHuman
+  - desc: "exp4-noPrediction"
+    factors:
+      playerCount: 1
+      allocatorType: none
+      isAI: false
+      isInteractive: false
+      nRound: 1
+      aiPrediction: 1box
+      predictorType: none
+      isHypothetical: true
+      skipResult: true
+      skipTraitSurveys: true
+    name: exp4-noPrediction

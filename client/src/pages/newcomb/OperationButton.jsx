@@ -1,11 +1,15 @@
 import { Button } from "@/components/animate-ui/components/buttons/button";
 import {
+    useGame,
     usePlayer,
     useStage
 } from "@empirica/core/player/classic/react";
 import React from "react";
 
 export function OperationButton() {
+    const game = useGame();
+    // exp4 treatments (the only ones with `predictorType`) skip Q2, so only Q1 is required there
+    const q2Required = !game.get("treatment")?.predictorType;
     const player = usePlayer();
     const stage = useStage();
 
@@ -13,7 +17,6 @@ export function OperationButton() {
 
     const stageName = stage.get("name");
     const buttonShown = !stageName || pdStep === "finished";
-    const beliefFilled = stageName === "belief" && player.round.get("beliefMade") && player.round.get("rationalMade");
 
     const checkCanProceed = () => {
         if (!stageName) return false;
@@ -26,11 +29,11 @@ export function OperationButton() {
                 return decision !== undefined && decision !== null && decision !== "";
 
             case "belief":
-                // 2つの入力（スライダーとラジオボタン）が完了しているかチェック
+                // スライダー（と、Q2 がある場合はラジオボタン）の入力が完了しているかチェック
                 // ※入力コンポーネント側で set("beliefMade", true) している前提
                 const beliefMade = player.round.get("beliefMade");
                 const rationalMade = player.round.get("rationalMade");
-                return beliefMade && rationalMade;
+                return beliefMade && (!q2Required || rationalMade);
 
             case "result":
             case "instruction":

@@ -83,7 +83,10 @@ Empirica.onGameStart(({ game }) => {
     });
     round.addStage({ name: "choice", duration: timeLimits.choice });
     round.addStage({ name: "belief", duration: timeLimits.belief });
-    round.addStage({ name: "result", duration: timeLimits.result });
+    // exp4: no feedback, so the contents of Box B are never revealed.
+    if (!treatment.skipResult) {
+      round.addStage({ name: "result", duration: timeLimits.result });
+    }
   }
 });
 
@@ -112,7 +115,10 @@ Empirica.onStageEnded(({ stage }) => {
 
   for (const player of players) {
     const playerChoice = player.round.get("decision");
-    const predictedChoice = (treatment.isAI) ? treatment.aiPrediction : player.round.get("drawnLabel");
+    // exp4 conditions (AI / human / none) all set `predictorType` and, like isAI,
+    // take Box B's contents from the fixed `aiPrediction` factor rather than a random draw.
+    const usesFixedContents = treatment.isAI || !!treatment.predictorType;
+    const predictedChoice = (usesFixedContents) ? treatment.aiPrediction : player.round.get("drawnLabel");
     const contentsOfBoxB = (predictedChoice === "1box") ? bonusConfig.newcombBoxBValue : 0;
     const playerScore = (playerChoice === "1box") ? contentsOfBoxB : (playerChoice === "2box") ? bonusConfig.newcombBoxAValue + contentsOfBoxB : 0;
     // const playerScore = (playerChoice === "1box") ? bonusConfig.newcombBoxBValue : (playerChoice === "2box") ? bonusConfig.newcombBoxAValue + bonusConfig.newcombBoxBValue : 0;
@@ -144,7 +150,8 @@ Empirica.onGameEnded(({ game }) => {
   const players = game.players;
   for (const player of players) {
     const totalScore = player.get("playerScore") || 0;
-    player.set("bonus", totalScore);
+    // Hypothetical treatments (exp4): the score is recorded but never paid.
+    player.set("bonus", (treatment.isHypothetical) ? 0 : totalScore);
 
     player.set("introStep", "Exit Survey");
     player.set("introStepIndex", 3);

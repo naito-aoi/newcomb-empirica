@@ -14,13 +14,17 @@ import {
   RiskSurvey,
   SoepSurvey
 } from "../intro-exit/SurveyItems.jsx";
+import { getPredictor } from "@/utils/predictor.js";
 
 export function ExitSurvey({ next }) {
   const game = useGame();
   const treatment = game?.get("treatment");
+  const p = getPredictor(treatment);
+  const isHypothetical = !!treatment.isHypothetical;
   const player = usePlayer();
   const totalScore = player.get("playerScore") || 0;
-  const paidBonus = Math.ceil((player.get("playerScore") / treatment.nRound) * 10) / 10 || 0;
+  // Hypothetical treatments (exp4): the box contents are never paid out.
+  const paidBonus = isHypothetical ? 0 : (Math.ceil((player.get("playerScore") / treatment.nRound) * 10) / 10 || 0);
   player.set("paidBonus", paidBonus);
   const PROLIFIC_CODE = player.get('PROLIFIC_CODE');
   const PROLIFIC_CODE_COMPREHENSION = player.get('PROLIFIC_CODE_COMPREHENSION');
@@ -87,7 +91,9 @@ export function ExitSurvey({ next }) {
               You have completed the <b>Decision Making Task</b>!
             </p>
             <p id="result-text">
-              Your ${(treatment.nRound) > 1 ? "average bonus" : "bonus"} for this study is <b>$${paidBonus}</b>, which will be paid separately within a few days.
+              ${isHypothetical
+                      ? `As explained in the tutorial, this task was <b>hypothetical</b>: the money in the boxes will <b>not actually be paid</b>. Your payment for this study does not depend on your choice.`
+                      : `Your ${(treatment.nRound) > 1 ? "average bonus" : "bonus"} for this study is <b>$${paidBonus}</b>, which will be paid separately within a few days.`}
             </p>
             `
                 }, {
@@ -145,32 +151,14 @@ export function ExitSurvey({ next }) {
                   "Don't want to answer"
                 ],
               }, {
-                "type": "dropdown",
-                "name": "education",
-                "title": "What is the highest grade of school or year of college you completed?",
+                "type": "text",
+                "name": "age",
+                "title": "What is your age?",
+                "inputType": "number",
                 "isRequired": true,
-                "choices": [
-                  "High school or less",
-                  "Some college (1-3 years)",
-                  "College graduate (Bachelors)",
-                  "More than a Bachelor's degree",
-                  "Other",
-                  "Don't want to answer"
-                ],
-              }, {
-                "type": "dropdown",
-                "name": "salary",
-                "title": "About how much wage and salary did you receive in the last year? It includes any type of income, such as a pension.",
-                "isRequired": true,
-                "choices": [
-                  "Less than $20,000",
-                  "$20,000 - $34,999",
-                  "$35,000 - $49,999",
-                  "$50,000 - $74,999",
-                  "$75,000 - $99,999",
-                  "Over $100,000",
-                  "Don't want to answer"
-                ],
+                "min": 18,
+                "max": 120,
+                "validators": [{ "type": "numeric", "minValue": 18, "maxValue": 120, "text": "Please enter your age in years." }],
                 // }, {
                 //   "type": "comment",
                 //   "name": "DecisionProcess",
@@ -178,21 +166,54 @@ export function ExitSurvey({ next }) {
                 //   "title": "Please tell us what you focused on and your decision-making process in this task.",
                 //   "isRequired": true,
                 //   "rows": 6
-              }, {
+              },
+              // exp4 (the only treatments with `predictorType`) with an AI / human predictor asks why the
+              // participant expects the prediction to succeed or fail; everything else keeps the original question.
+              (treatment.predictorType && p.isPredictor) ? {
+                "type": "comment",
+                "name": "PredictionReason",
+                'textUpdateMode': 'onTyping',
+                "title": `Do you think ${p.the} would succeed or fail in predicting your choice in this task? Please tell us why you think so.`,
+                "isRequired": true,
+                "rows": 6
+              } : {
                 "type": "comment",
                 "name": "PredictionSystem",
                 'textUpdateMode': 'onTyping',
-                "title": `How did the presence of the ${treatment.isAI ? "AI prediction system" : "random generator"} influence your decision-making process?`,
+                "title": (p.isNone) ? `How did the fact that the contents of Box B had already been determined influence your decision-making process?` : `How did the presence of ${p.type === "AI" ? "the AI prediction system" : p.type === "human" ? "the other person's prediction" : "the random generator"} influence your decision-making process?`,
                 "isRequired": true,
                 "rows": 6
-              }, {
+              },
+              // exp4 (the only treatments with `predictorType`), AI / human predictor only:
+              // what the participant pictured as the predictor.
+              ...((treatment.predictorType && p.isPredictor) ? [{
+                "type": "comment",
+                "name": "PredictorImage",
+                'textUpdateMode': 'onTyping',
+                "title": `What kind of ${p.type === "AI" ? "AI" : "person"} did you specifically imagine as ${p.the} ${p.type === "AI" ? "that" : "who"} predicted your decision in the task? If possible, please tell us any specific names or characteristics.`,
+                "isRequired": true,
+                "rows": 6
+              }] : []),
+              // exp4 (all conditions): which predictor the participant would pick if given the choice.
+              ...((treatment.predictorType) ? [{
+                "type": "radiogroup",
+                "name": "PreferredPredictor",
+                "title": "In this task, if you could choose either another person or an AI as the predictor who determines the contents of Box B, which would you prefer?",
+                "isRequired": true,
+                "choicesOrder": "random",
+                "choices": [
+                  { "value": "human", "text": "Another person" },
+                  { "value": "AI", "text": "An AI" }
+                ],
+              }] : []),
+              {
                 "type": "comment",
                 "name": "choiceIsNotRational",
                 'textUpdateMode': 'onTyping',
                 "title": `Your actual choices and the choices you consider rational do not seem to match. Please tell us why.`,
                 "isRequired": true,
                 "rows": 6,
-                "visibleIf": "!{choiceEqualRational}"
+                "visibleIf": "{showChoiceIsNotRational}"
               }, {
                 "type": "comment",
                 "name": "Confusion",
@@ -208,11 +229,27 @@ export function ExitSurvey({ next }) {
     }
   }
 
+  // exp4: no feedback at all, so skip the "Task Result" page and go straight to the survey.
+  if (treatment.skipResult && surveyJson.pages) {
+    surveyJson.pages = surveyJson.pages.filter((page) => page.name !== "page1");
+  }
+  // exp4: leave out the trait surveys (SOEP, risk, ideology, determinism);
+  // only the AI literacy scale (page5) and the questions on the last page remain.
+  if (treatment.skipTraitSurveys && surveyJson.pages) {
+    const traitPages = ["page2", "page3", "page4", "page6"];
+    surveyJson.pages = surveyJson.pages.filter((page) => !traitPages.includes(page.name));
+  }
+
   const survey = new Model(surveyJson);
   survey.applyTheme(themeJson);
   survey.showCompleteButton = true;
   survey.setVariable("treatment", treatment);
-  survey.setVariable("choiceEqualRational", choiceEqualRational);
+  // exp4 (the only treatments with `predictorType`) does not ask which choice is rational,
+  // so there is no mismatch to explain there.
+  survey.setVariable("showChoiceIsNotRational", !treatment.predictorType && !choiceEqualRational);
+  // The survey pages are only visible once `treatment` is set above. Without the always-visible
+  // "Task Result" page, the model initially lands on the last page, so go back to the first one.
+  survey.currentPageNo = 0;
 
   // Restore the survey state
   const storageItemKey = `survey_state_${player.id}_Exit`;

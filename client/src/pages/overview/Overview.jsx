@@ -23,6 +23,9 @@ export function Overview() {
   const treatment = game.get("treatment");
   const player = usePlayer();
 
+  // exp4 (the only treatments with `predictorType`) is presented as a survey
+  const taskLabel = (treatment.predictorType) ? 'Decision-making survey' : 'Decision making task';
+
   const stepsInteractive = [
     {
       label: 'Tutorial',
@@ -33,7 +36,7 @@ export function Overview() {
       description: '2 min',
     },
     {
-      label: 'Decision making task',
+      label: taskLabel,
       description: `5 min`,
     },
     {
@@ -46,7 +49,7 @@ export function Overview() {
       label: 'Tutorial',
       description: '3 min',
     }, {
-      label: 'Decision making task',
+      label: taskLabel,
       description: `5 min`,
     }, {
       label: 'Exit survey',

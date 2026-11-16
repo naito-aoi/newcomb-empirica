@@ -7,7 +7,7 @@ export $(cat .env | xargs)
 
 echo $STORE_PATH
 
-ssh -i deployment/$SERVER_PEM $SERVER_SSH bash << HERE
+ssh -i "$SERVER_PEM" $SERVER_SSH bash << HERE
  cd $SERVER_PATH
  if test -f RUNNING_PID
  then

@@ -5,7 +5,7 @@ cd "$parent_path"
 # Load dotenv
 export $(cat .env | xargs)
 
-ssh -i deployment/$SERVER_PEM $SERVER_SSH -tt bash << HERE
+ssh -i "$SERVER_PEM" $SERVER_SSH -tt bash << HERE
  cd $SERVER_PATH
  nohup ./start.sh &> nohup.out &
  exit
@@ -23,7 +23,7 @@ function cleanup()
 # Keep script open until an interrupt is sent
 trap cleanup EXIT
 
-ssh -i deployment/$SERVER_PEM $SERVER_SSH -tt bash << HERE
+ssh -i "$SERVER_PEM" $SERVER_SSH -tt bash << HERE
     cd $SERVER_PATH
     clear
     tail -f nohup.out

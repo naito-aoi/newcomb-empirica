@@ -117,6 +117,28 @@ b {
   padding: 0 0 0.5em 0;
 }
 
+/* Consent text: read inside a scrollable box (same as mta0-experiment) */
+.consent-scrollbox {
+  max-height: 60vh;
+  overflow-y: auto;
+  /* do not scroll the whole page when the end of the box is reached */
+  overscroll-behavior: contain;
+  margin-top: 1rem;
+  padding: 0 1rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+}
+
+/* When printing, drop the box and show the full text */
+@media print {
+  .consent-scrollbox {
+    max-height: none;
+    overflow: visible;
+    border: none;
+    padding: 0;
+  }
+}
+
 table {
   border-collapse: separate;
   border: transparent;

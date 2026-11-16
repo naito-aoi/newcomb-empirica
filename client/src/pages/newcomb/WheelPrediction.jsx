@@ -20,6 +20,7 @@ import { Loader } from '@/components/ai-elements/loader';
 import { CircleCheckBigIcon } from "lucide-react";
 import { Button } from "@/components/animate-ui/components/buttons/button";
 
+import { getPredictor } from "@/utils/predictor.js";
 import { DecisionButton } from "./DecisionButton.jsx";
 import { TextComponents } from './ColoredText.tsx';
 const customComponents = {
@@ -29,12 +30,13 @@ const customComponents = {
 export function WheelPrediction() {
     const game = useGame();
     const treatment = game.get("treatment");
+    const p = getPredictor(treatment);
     const player = usePlayer();
     const stage = useStage();
     const playerAvatar = player.get("avatar");
     const pdStep = player.round.get("pdStep") || "instruction"; // "instruction"; "message"; "decision"; "finished"
-    const loadDuration = treatment.isAI ? 5000 : 3000;
-    const loadDurationSecond = treatment.isAI ? 3000 : 1500;
+    const loadDuration = p.isPredictor ? 5000 : 3000;
+    const loadDurationSecond = p.isPredictor ? 3000 : 1500;
 
     if (stage.get("name") !== "choice") {
         return null;
@@ -60,6 +62,15 @@ export function WheelPrediction() {
         return () => clearTimeout(timer);
     }, [predictionStarted]);
 
+    // exp4 "No prediction": nothing to start, so go straight to the decision.
+    useEffect(() => {
+        if (p.isNone && pdStep === "instruction" && messages.length === 0) {
+            player.round.set("chatHistory-suggestion", [
+                { role: "assistant", content: "The contents of Box B have already been determined." }
+            ]);
+        }
+    }, []);
+
     useEffect(() => {
         if (messageStream.length === 1) {
             player.round.set("pdStep", "decision");
@@ -68,7 +79,7 @@ export function WheelPrediction() {
 
     return (
         <>
-            {(pdStep === 'instruction') ? (
+            {(pdStep === 'instruction' && !p.isNone) ? (
                 <div className="relative flex items-center justify-center mt-4 gap-2">
                     <div className="absolute inset-0 flex items-center justify-center">
                         <div className="h-8 w-30 rounded-md bg-green-500 animate-ping"></div>
@@ -91,11 +102,11 @@ export function WheelPrediction() {
                             const currentHistory = Array.isArray(player.round.get("chatHistory-suggestion")) ? player.round.get("chatHistory-suggestion") : [];
                             player.round.set("chatHistory-suggestion", [
                                 ...currentHistory,
-                                { role: "assistant", content: `${(treatment.isAI) ? "The AI has predicted your choice and fixed the contents in Box B!" : "The random generator has drawn a label and fixed the contents in Box B!"}` }
+                                { role: "assistant", content: `${(p.isPredictor) ? (treatment.predictorType ? `In this hypothetical situation, ${p.the} has already predicted your choice, and the contents of Box B have been fixed according to that prediction.` : `${p.The} has predicted your choice and fixed the contents in Box B!`) : "The random generator has drawn a label and fixed the contents in Box B!"}` }
                             ]);
                         }}
                     >
-                        {(treatment.isAI) ? "Start prediction" : "Draw a label"}
+                        {(p.isPredictor) ? "Start prediction" : "Draw a label"}
                     </Button>
                 </div>
             ) : (
@@ -103,10 +114,10 @@ export function WheelPrediction() {
             )}
             <Conversation id="ai-conversation" className="w-full h-50 mb-auto px-4" style={{ height: '500px' }}>
                 <ConversationContent>
-                    {(pdStep === "instruction") ? (
+                    {(pdStep === "instruction" && !p.isNone) ? (
                         <ConversationEmptyState
                             title="No result yet."
-                            description={`Please click "${(treatment.isAI) ? "Start prediction" : "Draw a label"}" button above.`}
+                            description={`Please click "${(p.isPredictor) ? "Start prediction" : "Draw a label"}" button above.`}
                         />
                     ) : (
                         messageStream.map((message, index) => (
@@ -122,7 +133,7 @@ export function WheelPrediction() {
                         <>
                             <div className="flex items-center mx-1 gap-2">
                                 {showSecondMessage ? <CircleCheckBigIcon className="w-4 h-4 text-neutral-400" /> : <Loader size={16} className="text-neutral-400" />}
-                                <span className={`text-sm text-neutral-400 font-light ${showSecondMessage ? "animate-pulse" : ""}`}>{(treatment.isAI) ? "AI is predicting your choice..." : "The random generator is drawing a label..."}</span>
+                                <span className={`text-sm text-neutral-400 font-light ${showSecondMessage ? "animate-pulse" : ""}`}>{(p.isPredictor) ? `${p.type === "AI" ? "AI" : p.The} is predicting your choice...` : "The random generator is drawing a label..."}</span>
                             </div>
                             {showSecondMessage && (
                                 <div className="flex mx-1 gap-2 mt-2">

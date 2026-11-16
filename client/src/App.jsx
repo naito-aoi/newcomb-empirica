@@ -7,7 +7,6 @@ import { ExitSurvey } from "./pages/intro-exit/ExitSurvey";
 import { Introduction } from "./pages/intro-exit/Introduction";
 import { Lobby } from "./pages/custom-form/Lobby";
 import { NoGames } from "./pages/custom-form/NoGames";
-import { PlayerForm } from "./pages/custom-form/PlayerForm";
 import { ConsentForm } from "./pages/custom-form/ConsentForm";
 
 export default function App() {
@@ -28,16 +27,19 @@ export default function App() {
   return (
     <EmpiricaParticipant url={url} ns={playerKey} modeFunc={EmpiricaClassic}>
       <div className="h-screen relative">
-      {/* <EmpiricaMenu position="bottom-left" /> */}
-      {(window.location.hostname != 'localhost') ? null : <EmpiricaMenu position="bottom-right" />}
+        {/* <EmpiricaMenu position="bottom-left" /> */}
+        {/* {(window.location.hostname != 'localhost') ? null : <EmpiricaMenu position="bottom-right" />} */}
         <div className="h-full overflow-auto">
-          <EmpiricaContext 
-            introSteps={introSteps} 
+          <EmpiricaContext
+            introSteps={introSteps}
             exitSteps={exitSteps}
             // lobby={Lobby}
-            playerCreate={PlayerForm}
+            // The consent form doubles as the player-creation form, so it is shown to every
+            // participant who has to be registered; Empirica's built-in consent step (remembered
+            // in the browser and skipped afterwards) is turned off.
+            playerCreate={ConsentForm}
             noGames={NoGames}
-            consent={ConsentForm}
+            disableConsent
           >
             <Game />
           </EmpiricaContext>

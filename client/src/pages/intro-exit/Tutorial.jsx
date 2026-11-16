@@ -7,11 +7,36 @@ import {
     useGame,
     usePlayer
 } from "@empirica/core/player/classic/react";
+import { getPredictor } from "@/utils/predictor.js";
 
 export function Tutorial({ next }) {
     const game = useGame();
     const player = usePlayer();
     const treatment = game.get('treatment');
+    const p = getPredictor(treatment);
+    // exp4 treatments are the only ones that set the `predictorType` factor
+    const isExp4 = !!treatment.predictorType;
+
+    // exp4: the money in the boxes is hypothetical and never paid out.
+    const payoffNote = (treatment.isHypothetical) ? `
+                                    <p>
+                                        <b>Please note that this task is hypothetical: the money in the boxes will NOT actually be paid.</b>
+                                        Nevertheless, please make your choice as if the money were real.
+                                    </p>
+    ` : `You will receive the contents of the box(es) you open as a bonus.`;
+
+    // exp4: `reliability` controls what is said about the predictor's accuracy.
+    //   reliable -> high reliability is stated explicitly
+    //   agnostic -> nothing at all is said about reliability
+    //   (unset)  -> exp1-3 wording
+    const twoOrOne = `whether you will choose <span id='two-boxer'>two boxes</span> or <span id='one-boxer'>one box</span>:`;
+    const predictorIntro = (!p.isPredictor) ?
+        `One of two labels below will be <b>randomly drawn</b> with equal probabilities:`
+        : (treatment.reliability === "reliable") ?
+            `<b><span id='ai-avatar'>${p.type === "AI" ? "The AI system" : "This person"}</span> has been trained to predict people's choices in this task and has correctly predicted 98 out of 100 previous participants' choices.</b> <span id='ai-avatar'>${p.The}</span> predicts ${twoOrOne}`
+            : (treatment.reliability === "agnostic") ?
+                `<span id='ai-avatar'>${p.The}</span> predicts ${twoOrOne}`
+                : `<span id='ai-avatar'>The AI</span> is specifically designed for this task to predict</b> whether people will choose <span id='two-boxer'>two boxes</span> or <span id='one-boxer'>one box</span>:`;
     const runMode = player.get('runMode');
 
     const returnBonus = player.get('returnBonus');
@@ -510,10 +535,10 @@ export function Tutorial({ next }) {
                                             <b>Box A</b> (left): <b>$${newcombBoxAValue}</b> is guaranteed.
                                         </li>
                                         <li>
-                                            <b>Box B</b> (right): The contents are either <b>$0 or $${newcombBoxBValue}</b>, determined by <span id='ai-avatar'>${(treatment.isAI) ? "an AI" : "a random generator"}</span>.
+                                            <b>Box B</b> (right): The contents are either <b>$0 or $${newcombBoxBValue}</b>${(p.isNone) ? ", and have already been determined" : `, determined by <span id='ai-avatar'>${p.a}</span>`}.
                                         </li>
                                     </ol>
-                                    You will receive the contents of the box(es) you open as a bonus.
+                                    ${payoffNote}
                                 `
                             }
                         ],
@@ -530,7 +555,7 @@ export function Tutorial({ next }) {
                             }, {
                                 "type": "radiogroup",
                                 "name": "question1",
-                                "title": "If you open both Box A and Box B, how much could you get in total?",
+                                "title": "Suppose you opened both boxes. How much money would you receive in this hypothetical situation?",
                                 "isRequired": true,
                                 "choicesOrder": "random",
                                 "choices": [
@@ -572,13 +597,13 @@ export function Tutorial({ next }) {
                                         You have two options:
                                     </p>
                                     <ol>
-                                        <li>Open <span id="two-boxer">Box A and Box B</span> — you will receive $${newcombBoxAValue} from <b>Box A</b> + the contents of <b>Box B</b> ($0 or $${newcombBoxBValue})</li>
+                                        <li>Open <span id="two-boxer">Box A and Box B</span> — you would receive $${newcombBoxAValue} from <b>Box A</b> + the contents of <b>Box B</b> ($0 or $${newcombBoxBValue})</li>
                                     </ol>
                                     <p>
                                         OR
                                     </p>
                                     <ol>
-                                        <li>Open <span id="one-boxer">Box B only</span> — you will receive the contents of <b>Box B</b> ($0 or $${newcombBoxBValue})</li>
+                                        <li>Open <span id="one-boxer">Box B only</span> — you would receive the contents of <b>Box B</b> ($0 or $${newcombBoxBValue})</li>
                                     </ol>
                                 `
                             }, {
@@ -637,16 +662,16 @@ export function Tutorial({ next }) {
                                 "name": "inst4Text",
                                 "html": `
                                     <h5>
-                                        ${(treatment.isAI) ? "AI" : "Random Generator"} Decides the Contents of Box B
+                                        ${p.title} Decides the Contents of Box B
                                     </h5>
                                     <p>
-                                        Before you make a decision, <span id='ai-avatar'>${(treatment.isAI) ? "an AI" : "a random generator"}</span> sets the contents of Box B ${(treatment.isAI) ? "based on its prediction" : ""}. 
-                                        ${(treatment.isAI) ? `<span id='ai-avatar'>The AI</span> is specifically designed for this task to predict</b> whether people will choose <span id='two-boxer'>two boxes</span> or <span id='one-boxer'>one box</span>:` : `One of two labels below will be <b>randomly drawn</b> with equal probabilities:`}
+                                        Before you make a decision, <span id='ai-avatar'>${p.a}</span> sets the contents of Box B ${(p.isPredictor) ? `based on ${p.pronounPoss} prediction` : ""}. 
+                                        ${predictorIntro}
                                     </p>
                                 `
                             }, {
                                 "type": "image",
-                                "imageLink": `/fig/Newcomb/newcomb-${(treatment.isAI) ? "predictions" : "labels"}.png`,
+                                "imageLink": `/fig/Newcomb/newcomb-${(p.isPredictor) ? "predictions" : "labels"}.png`,
                                 "imageHeight": 200,
                                 "imageWidth": 800
                             }, {
@@ -654,13 +679,13 @@ export function Tutorial({ next }) {
                                 "html": `
                                     <ol>
                                         <li>
-                                            If <span id="ai-avatar">${(treatment.isAI) ? `the AI` : `the random generator`}</span> ${(treatment.isAI) ? ` predicts "you will choose <span id='two-boxer'>two boxes</span>"` : ` draws the "<span id='two-boxer'>Two Boxes</span>" label`}, the contents of Box B are set to <b>$0</b>.
+                                            If <span id="ai-avatar">${p.the}</span> ${(p.isPredictor) ? ` predicts "you will choose <span id='two-boxer'>two boxes</span>"` : ` draws the "<span id='two-boxer'>Two Boxes</span>" label`}, the contents of Box B are set to <b>$0</b>.
                                         </li>
                                     </ol>  
                                 `
                             }, {
                                 "type": "image",
-                                "imageLink": `/fig/Newcomb/newcomb-${(treatment.isAI) ? "ai" : "label"}-prediction-2box.png`,
+                                "imageLink": `/fig/Newcomb/newcomb-${p.imageKey}-prediction-2box.png`,
                                 "imageHeight": 200,
                                 "imageWidth": 800
                             }, {
@@ -668,20 +693,20 @@ export function Tutorial({ next }) {
                                 "html": `
                                     <ol>
                                         <li>
-                                            If <span id="ai-avatar">${(treatment.isAI) ? "the AI" : "the random generator"}</span>${(treatment.isAI) ? ` predicts "you will choose <span id='one-boxer'>one box</span>"` : ` draws the "<span id='one-boxer'>One Box</span>" label`}, the contents of Box B are set to <b>$${newcombBoxBValue}</b>.
+                                            If <span id="ai-avatar">${p.the}</span>${(p.isPredictor) ? ` predicts "you will choose <span id='one-boxer'>one box</span>"` : ` draws the "<span id='one-boxer'>One Box</span>" label`}, the contents of Box B are set to <b>$${newcombBoxBValue}</b>.
                                         </li>
                                     </ol>  
                                 `
                             }, {
                                 "type": "image",
-                                "imageLink": `/fig/Newcomb/newcomb-${(treatment.isAI) ? "ai" : "label"}-prediction-1box.png`,
+                                "imageLink": `/fig/Newcomb/newcomb-${p.imageKey}-prediction-1box.png`,
                                 "imageHeight": 200,
                                 "imageWidth": 800
                             }, {
                                 "type": "html",
                                 "html": `
                                     <p>
-                                        Note that $${newcombBoxAValue} in Box A is fixed regardless of the ${(treatment.isAI) ? "AI's prediction" : "random generator's result"}.
+                                        Note that $${newcombBoxAValue} in Box A is fixed regardless of ${(p.isPredictor) ? `${p.possessive} prediction` : "the random generator's result"}.
                                     </p>
                                 `
                             }
@@ -705,10 +730,10 @@ export function Tutorial({ next }) {
                                 "choices": [
                                     {
                                         "value": 1,
-                                        "text": `${(treatment.isAI) ? "Randomly" : "By an AI prediction"}`
+                                        "text": `${(p.isPredictor) ? "Randomly" : "By an AI prediction"}`
                                     }, {
                                         "value": 0,
-                                        "text": `${(treatment.isAI) ? "By the AI's prediction" : "Randomly"}` + `${(runMode === "dev" ? " [correct]" : "")}`
+                                        "text": `${(p.isPredictor) ? `By ${p.possessive} prediction` : "Randomly"}` + `${(runMode === "dev" ? " [correct]" : "")}`
                                     }, {
                                         "value": 2,
                                         "text": `Depending on your choice`
@@ -738,7 +763,7 @@ export function Tutorial({ next }) {
                                         After Box B Is Set, You Decide
                                     </h5>
                                     <p>
-                                        After <span id="ai-avatar">${(treatment.isAI) ? "the AI</span> has predicted your choice and" : "the random generator</span> has"} determined the contents of Box B, you will decide either:
+                                        After <span id="ai-avatar">${p.the}</span> has ${(p.isPredictor) ? "predicted your choice and" : ""} determined the contents of Box B, you will decide either:
                                     </p>
                                     <ol>
                                         <li><span id="two-boxer">Box A and Box B </span> — a guaranteed $${newcombBoxAValue} from <b>Box A</b> + a chance of $0 or $${newcombBoxBValue} from <b>Box B</b></li>
@@ -751,7 +776,7 @@ export function Tutorial({ next }) {
                                     </ol>
                                     <p>
                                         Please keep in mind that the contents of Box B have already been fixed before you make a decision.    
-                                        You will be informed of ${(treatment.isAI) ? "the AI's prediction" : "the random generator's outcome"} at the end of the task.
+                                        ${(treatment.skipResult) ? "" : `You will be informed of ${(p.isPredictor) ? `${p.possessive} prediction` : "the random generator's outcome"} at the end of the task.`}
                                     </p>
                                 `
                             }, {
@@ -783,13 +808,13 @@ export function Tutorial({ next }) {
                                         "text": `When you choose Box B only`
                                     }, {
                                         "value": 2,
-                                        "text": `When ${(treatment.isAI) ? "a random generator draws the \"One Box\" label" : "an AI predicts you choose Box B only"}`
+                                        "text": `When ${(p.isPredictor) ? "a random generator draws the \"One Box\" label" : "an AI predicts you choose Box B only"}`
                                     }, {
                                         "value": 0,
-                                        "text": `When ${(treatment.isAI) ? "the AI predicts you choose Box B only" : "the random generator draws the \"One Box\" label"}` + `${(runMode === "dev" ? " [correct]" : "")}`
+                                        "text": `When ${(p.isPredictor) ? `${p.the} predicts you choose Box B only` : "the random generator draws the \"One Box\" label"}` + `${(runMode === "dev" ? " [correct]" : "")}`
                                     }, {
                                         "value": 3,
-                                        "text": `When ${(treatment.isAI) ? "the AI predicts you choose both Box A and Box B" : "the random generator draws the \"Two Boxes\" label"}`
+                                        "text": `When ${(p.isPredictor) ? `${p.the} predicts you choose both Box A and Box B` : "the random generator draws the \"Two Boxes\" label"}`
                                     }
                                 ],
                                 "correctAnswer": 0
@@ -919,7 +944,7 @@ export function Tutorial({ next }) {
                                         The outcome of this check will not affect the result of the main task.
                                     </p>
                                 `,
-                                "visibleIf": "{treatment.isInteractive} = 'true' and {treatment.isAI} = 'false'"
+                                "visibleIf": "{treatment.isInteractive} = 'true' and {treatment.allocatorType} = 'random'"
                             }
                         ],
                         "showQuestionNumbers": "off"
@@ -941,7 +966,7 @@ export function Tutorial({ next }) {
                                     </h5>
                                     <p>
                                         You will repeat the decision-making task for <b>multiple rounds</b>.
-                                        In each round, you can check the outcome based on your choice and <span id="ai-avatar">${(treatment.isAI) ? "the AI's prediction" : "the random generator's outcome"}</span>.
+                                        In each round, you can check the outcome based on your choice and <span id="ai-avatar">${(p.isPredictor) ? `${p.possessive} prediction` : "the random generator's outcome"}</span>.
                                     </p>
                                     <p>
                                         The final bonus will be calculated based on the <b>average</b> rewards you earn across all rounds.
@@ -967,6 +992,11 @@ export function Tutorial({ next }) {
                                     <h5>
                                         You have completed the tutorial!
                                     </h5>
+                                    ${(treatment.isHypothetical) ? `
+                                    <p>
+                                        Remember that this is a hypothetical decision-making situation. You will not receive the money described in the scenario. However, please <b>consider the situation carefully and choose the option you would actually prefer</b> if you were facing this decision.
+                                    </p>
+                                    ` : ""}
                                     <p>
                                         Please click the "Complete" button below to proceed to the Decision Making Task.
                                     </p>
@@ -979,6 +1009,198 @@ export function Tutorial({ next }) {
             }
         ]
     };
+
+    // exp4 (the only treatments with `predictorType`): a hypothetical "Decision-Making Survey".
+    //   - page1 states up front that the situation is hypothetical and the payment is fixed
+    //   - page2 only presents the two boxes; the predictor is not mentioned until page4
+    //   - every other page (and the page2 comprehension question) keeps the original wording
+    if (isExp4) {
+        const instruction = (name, elements) => ({
+            "type": "panel",
+            "name": name,
+            "elements": elements,
+            "showQuestionNumbers": "off"
+        });
+        const html = (content) => ({ "type": "html", "html": content });
+        // the comprehension question of page2 is kept as it was
+        const originalQ1 = surveyJson.pages.find((page) => page.name === "page2").elements[1];
+
+        const exp4Pages = {
+            page1: [
+                instruction("panel1", [
+                    html(`
+                        <h5>
+                            Welcome to the Decision-Making Survey
+                        </h5>
+                        <br>
+                        <p>
+                            In this survey, you will be asked to consider a <b>hypothetical decision-making situation</b> and indicate what you would choose.
+                            The situation involves possible monetary rewards, but <b>you will not receive the money described in the scenario</b>.
+                            Instead, you will receive <b>a fixed payment for completing the survey, regardless of your decision</b>.
+                            Please answer as you would if you were actually facing the situation.
+                        </p>
+                        <p>
+                            As you read through the instructions, please answer the comprehension questions on the following pages.
+                            If you answer a question incorrectly <b>twice</b>, you will be asked to return this study.
+                            We only use these questions to ensure you understand the study details.
+                        </p>
+                    `)
+                ])
+            ],
+            page2: [
+                instruction("panel2", [
+                    html(`
+                        <h5>
+                            Decision Making with Two Boxes
+                        </h5>
+                        <p>
+                            Suppose you are presented with <b>two boxes</b>, Box A and Box B.
+                        </p>
+                        <img src="/fig/Newcomb/newcomb-boxes.png" className="mx-auto mb-2" />
+                        <ol>
+                            <li>
+                                <b>Box A</b> (left) contains <b>$${newcombBoxAValue}</b>.
+                            </li>
+                            <li>
+                                <b>Box B</b> (right) contains either <b>$0 or $${newcombBoxBValue}</b>. You do not know which amount is inside Box B.
+                            </li>
+                        </ol>
+                        <p>
+                            You will have an opportunity to choose either Box B alone or both boxes.
+                            Before making your choice, you will learn how the amount in Box B was determined.
+                        </p>
+                    `)
+                ]),
+                originalQ1
+            ]
+        };
+
+        for (const page of surveyJson.pages) {
+            if (exp4Pages[page.name]) page.elements = exp4Pages[page.name];
+        }
+
+        // AI / human predictor: the original page4 is split into two pages.
+        //   page4a - the predictor predicts the participant's choice
+        //   page4  - the predictor sets the contents of Box B based on that prediction
+        // The sentences, images and the comprehension question are the original ones, only redistributed.
+        if (p.isPredictor) {
+            const page4Index = surveyJson.pages.findIndex((page) => page.name === "page4");
+            const page4 = surveyJson.pages[page4Index];
+            const [panel4, q3] = page4.elements;
+            // panel4.elements: [intro text, predictions image, ...rules of Box B (texts and images)]
+            const [, predictionsImage, ...boxBRules] = panel4.elements;
+
+            const page4a = {
+                "name": "page4a",
+                "elements": [
+                    instruction("panel4a", [
+                        html(`
+                            <h5>
+                                ${p.title} Predicts Your Choice
+                            </h5>
+                            <p>
+                                Before you make your choice, <span id='ai-avatar'>${p.type === "AI" ? "an AI system" : "another person"}</span> predicts whether you will choose <span id='two-boxer'>both boxes</span> or <span id='one-boxer'>Box B only</span>.
+                                ${(treatment.reliability === "reliable") ? `<b><span id='ai-avatar'>${p.type === "AI" ? "The AI system" : "This person"}</span> has been trained to predict people's choices in this task and has correctly predicted 98 out of 100 previous participants' choices.</b>` : ""}
+                            </p>
+                        `),
+                        predictionsImage,
+                        // illustration of the predictor (cut out of newcomb-{ai,human}-prediction-*.png)
+                        {
+                            "type": "image",
+                            "imageLink": `/fig/Newcomb/newcomb-${p.imageKey}-predictor.png`,
+                            "imageHeight": 200,
+                            "imageWidth": 800
+                        }
+                    ])
+                ]
+            };
+            page4.elements = [
+                instruction("panel4", [
+                    html(`
+                        <h5>
+                            The Contents of Box B are fixed based on ${p.title}'s Prediction
+                        </h5>
+                        <p>
+                            The prediction will then be used to determine the contents of Box B: <b>$0</b> if <span id='ai-avatar'>${p.the}</span> predicts <span id='two-boxer'>both boxes</span>, and <b>$${newcombBoxBValue}</b> if <span id='ai-avatar'>${p.the}</span> predicts <span id='one-boxer'>Box B only</span>.
+                        </p>
+                        <p>
+                            <b>The contents of Box B are fixed before you make your choice and cannot be changed afterward</b>.
+                        </p>
+                    `),
+                    ...boxBRules
+                ]),
+                q3
+            ];
+            surveyJson.pages.splice(page4Index, 0, page4a);
+        }
+    }
+
+    // exp4 "No prediction": no predictor is mentioned anywhere; the tutorial only says
+    // that the contents of Box B have already been determined.
+    if (p.isNone) {
+        const correctMark = (runMode === "dev" ? " [correct]" : "");
+        const question = (name, title, choices) => ({
+            "type": "panel",
+            "name": `q${name.slice(-1)}`,
+            "elements": [
+                { "type": "html", "html": `<h5>Comprehension Question</h5>` },
+                { "type": "radiogroup", "name": name, "title": title, "isRequired": true, "choicesOrder": "random", "choices": choices, "correctAnswer": 0 }
+            ],
+            "showQuestionNumbers": "off"
+        });
+        const nonePages = {
+            page5: [
+                {
+                    "type": "panel",
+                    "name": "panel5",
+                    "elements": [
+                        {
+                            "type": "html",
+                            "name": "inst5Text",
+                            "html": `
+                                <h5>
+                                    Box B Is Already Set, and You Decide
+                                </h5>
+                                <p>
+                                    With the contents of Box B already determined, you will decide either:
+                                </p>
+                                <ol>
+                                    <li><span id="two-boxer">Box A and Box B </span> — a guaranteed $${newcombBoxAValue} from <b>Box A</b> + a chance of $0 or $${newcombBoxBValue} from <b>Box B</b></li>
+                                </ol>
+                                <p>
+                                    OR
+                                </p>
+                                <ol>
+                                    <li><span id="one-boxer">Box B only</span> — a chance of $0 or $${newcombBoxBValue} from <b>Box B</b></li>
+                                </ol>
+                                <p>
+                                    Please keep in mind that the contents of Box B have already been fixed before you make a decision.
+                                    ${(treatment.skipResult) ? "" : "You will be informed of the contents of Box B at the end of the task."}
+                                </p>
+                            `
+                        }, {
+                            "type": "image",
+                            "imageLink": `/fig/Newcomb/newcomb-options-2.png`,
+                            "imageHeight": 200,
+                            "imageWidth": 800
+                        }
+                    ],
+                    "showQuestionNumbers": "off"
+                },
+                question("question4", "When you make your decision, what do you know about the contents of Box B?", [
+                    { "value": 0, "text": `They are already determined to be either $0 or $${newcombBoxBValue}, but you do not know which` + correctMark },
+                    { "value": 1, "text": `Box B certainly contains $${newcombBoxBValue}` },
+                    { "value": 2, "text": `Box B is certainly empty` },
+                    { "value": 3, "text": `They will be determined after you decide` }
+                ])
+            ]
+        };
+        for (const page of surveyJson.pages) {
+            if (nonePages[page.name]) page.elements = nonePages[page.name];
+        }
+        // page4 (how Box B is determined) and its comprehension question are left out in this condition.
+        surveyJson.pages = surveyJson.pages.filter((page) => page.name !== "page4");
+    }
 
     const nComprehensionFailed = player.get('nComprehensionFailed') || 0;
     const failedQuestions = player.get('failedQuestions');

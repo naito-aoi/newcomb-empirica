@@ -15,10 +15,14 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/ui/radio-group"
+import { getPredictor } from "@/utils/predictor.js";
 
 export function BeliefSlider() {
   const game = useGame();
   const treatment = game.get("treatment");
+  const p = getPredictor(treatment);
+  // exp4 treatments are the only ones that set the `predictorType` factor; Q2 is not asked there
+  const showQ2 = !treatment.predictorType;
   const player = usePlayer();
   const playerAvatar = player.get("avatar");
 
@@ -53,6 +57,22 @@ export function BeliefSlider() {
   // const cumulativeScore = player.get("playerScore") || 0;
   // const averageScoreSoFar = parseFloat(cumulativeScore / currentRound).toFixed(2).replace(/\.?0+$/, '');
 
+  const boxBValue = player.get("newcombBoxBValue");
+  // exp4 "No prediction": there is no predictor to rate, so Q1 asks about the contents of Box B instead.
+  const q1 = (p.isNone) ? {
+    question: `In how many of them do you think Box B would contain $${boxBValue}?`,
+    label: `Box B would contain $${boxBValue}`,
+    low: `Never $${boxBValue}`,
+    mid: "Half the time",
+    high: `Always $${boxBValue}`,
+  } : {
+    question: `How many times do you think ${p.isPredictor ? `${p.the} would correctly predict` : `the labels ("Two Boxes" / "One Box") drawn by the random generator will match`} your choice?`,
+    label: p.isPredictor ? `${p.The} would be correct` : "The labels would match",
+    low: `Always ${p.isPredictor ? "wrong" : "mismatched"}`,
+    mid: "Random",
+    high: `Always ${p.isPredictor ? "correct" : "matched"}`,
+  };
+
   const beliefSliderUI = (
     <>
       <div className="flex flex-col w-120 mt-8">
@@ -65,7 +85,7 @@ export function BeliefSlider() {
                 Imagine playing this task 100 times, starting fresh each time.
               </div>
               <div className="mt-2">
-                How many times do you think the {treatment.isAI ? `AI would correctly predict` : `the labels ("Two Boxes" / "One Box") drawn by the random generator will match`} your choice?
+                {q1.question}
               </div>
             </div>
           </div>
@@ -75,7 +95,7 @@ export function BeliefSlider() {
         </div>
         <div className="flex flex-col gap-2 px-4 mb-4">
           <div className="flex items-center justify-between mb-2">
-            <Label htmlFor="slider"><span className="text-red-500">*</span>The {treatment.isAI ? "AI would be correct" : "labels would match"}</Label>
+            <Label htmlFor="slider"><span className="text-red-500">*</span>{q1.label}</Label>
             <span className="text-muted-foreground text-sm"><b className="text-lg text-blue-500">{belief}</b> out of 100 times</span>
           </div>
           <Slider
@@ -90,19 +110,20 @@ export function BeliefSlider() {
           <div className="flex items-center justify-between text-muted-foreground text-xs tabular-nums">
             <div>
               <div className="w-30 text-left font-md text-sm">0</div>
-              <div className="w-30 text-left text-xs text-neutral-400">Always {treatment.isAI ? "wrong" : "mismatched"}</div>
+              <div className="w-30 text-left text-xs text-neutral-400">{q1.low}</div>
             </div>
             <div>
               <div className="w-30 text-center font-md text-sm">50</div>
-              <div className="w-30 text-center text-xs text-neutral-400">Random</div>
+              <div className="w-30 text-center text-xs text-neutral-400">{q1.mid}</div>
             </div>
             <div>
               <div className="w-30 text-right font-md text-sm"> 100</div>
-              <div className="w-30 text-right text-xs text-neutral-400">Always {treatment.isAI ? "correct" : "matched"}</div>
+              <div className="w-30 text-right text-xs text-neutral-400">{q1.high}</div>
             </div>
             {/* <span className="w-30 text-right">100% (perfect predictive ability)</span> */}
           </div>
         </div>
+        {showQ2 && <>
         <div className="bg-blue-50 p-4 mt-8 mb-6 rounded-lg">
           <div className="flex gap-2 mb-3 text-sm font-medium">
             <div>Q2. </div>
@@ -131,6 +152,7 @@ export function BeliefSlider() {
             </div>
           </RadioGroup>
         </div>
+        </>}
       </div>
     </>
   );

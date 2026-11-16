@@ -1,0 +1,7 @@
+
+> newcomb-empirica@1.0.0 start:api
+> node api/router.mjs
+
+dotEnvPath: /Users/naitoaoi/src/github.com/naito-aoi/workspace/knowledge/projects/in-progress/ai-prophecy/experiment/newcomb-empirica/.env
+Loading dotenv file!
+🚀 API Server running on port 4000
